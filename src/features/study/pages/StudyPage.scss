@@ -1,0 +1,203 @@
+.study-page {
+  width: 100%;
+  padding: 50px 0 80px;
+
+  @media (max-width: 768px) {
+    padding: 24px 0 40px;
+  }
+
+  .study-page-container {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .study-page-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    color: #1d2939;
+
+    @media (max-width: 768px) {
+      margin-bottom: 16px;
+    }
+  }
+
+  .study-page-title {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #1d2939;
+    margin: 0 0 40px 0;
+    font-family: 'FSPFBeauSansPro', sans-serif;
+
+    @media (max-width: 1024px) {
+      font-size: 28px;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+  }
+
+  .study-page-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  .study-course-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--Gray-100, #ddd);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .study-card-banner {
+      position: relative;
+      width: 100%;
+      height: 240px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+
+      @media (max-width: 768px) {
+        height: 200px;
+      }
+
+      &.study-card-banner-chill {
+        position: relative;
+        overflow: hidden;
+      }
+
+      &.study-card-banner-kanji {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .study-card-banner-image {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+
+        @media (max-width: 768px) {
+          height: 200px;
+        }
+      }
+
+      .study-card-banner-placeholder {
+        width: 100%;
+        height: 240px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        color: #676767;
+        font-size: 14px;
+        font-weight: 500;
+
+        @media (max-width: 768px) {
+          height: 200px;
+        }
+      }
+    }
+
+    .study-card-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      flex: 1;
+
+      @media (max-width: 768px) {
+        padding: 16px;
+        gap: 10px;
+      }
+
+      .study-card-title {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: #1d2939;
+        margin: 0;
+        font-family: 'FSPFBeauSansPro', sans-serif;
+
+        @media (max-width: 768px) {
+          font-size: 18px;
+        }
+      }
+
+      .study-card-lesson {
+        font-size: 14px;
+        color: #676767;
+        font-weight: 400;
+
+        @media (max-width: 768px) {
+          font-size: 12px;
+        }
+      }
+
+      .study-card-play-button {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: 48px;
+        height: 35px;
+        border-radius: 10px;
+        border: 1px solid var(--Orange-600, #dd673c);
+        background: #f37142;
+        box-shadow: 0 1px 2px #1018280d;
+        border-bottom: 4px solid #ad502f;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        @media (max-width: 768px) {
+          width: 35px;
+          height: 35px;
+          bottom: 16px;
+          right: 16px;
+        }
+
+        &:hover {
+          transform: scale(1.1);
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
+
+        svg {
+          margin-left: 2px; // Slight adjustment for visual center
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,193 @@
+.lesson-vocab {
+  width: 100%;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  font-family: 'FS PFBeauSansPro', sans-serif;
+
+  .lesson-vocab-container {
+    display: flex;
+    flex: 1;
+    align-items: stretch;
+    gap: 40px;
+    margin-bottom: 20px;
+    position: relative;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+
+  .lesson-vocab-illustration {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #f9f9f9;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      min-height: 250px;
+    }
+  }
+
+  // Right Section - Vocabulary Details
+  .lesson-vocab-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 10px;
+    position: relative;
+
+    .lesson-vocab-details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .audio-controls {
+      display: flex;
+      gap: 12px;
+
+      .audio-button {
+        width: 30px;
+        height: 30px;
+        border-radius: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        &:hover:not(:disabled) {
+          transform: scale(1.05);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        &:active:not(:disabled) {
+          transform: scale(0.95);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+
+      .mic-button {
+        border: 1px solid var(--Orange-500, #f37142);
+        background: var(--Orange-50, #fef1ec);
+      }
+
+      .speaker-button {
+        border: 1px solid var(--Blue-light-500, #0ba5ec);
+        background: var(--Blue-light-50, #f0f9ff);
+      }
+    }
+
+    .vocabulary-section {
+      .vocabulary-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #676767;
+        margin-bottom: 12px;
+      }
+
+      .vocabulary-word {
+        font-size: 48px;
+        font-weight: bold;
+        color: #1d2939;
+        line-height: 1.2;
+        margin-bottom: 20px;
+
+        @media (max-width: 768px) {
+          font-size: 36px;
+        }
+      }
+    }
+
+    // Information Cards
+    .information-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .info-card {
+        border-radius: 8px;
+        border: 1px solid var(--Gray-100, #ddd);
+        background: var(--Gray-25, #fafafa);
+        border-radius: 8px;
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .info-label {
+          font-size: 12px;
+          font-weight: 600;
+          color: #676767;
+          margin-bottom: 4px;
+        }
+
+        .info-value {
+          font-size: 14px;
+          color: #1d2939;
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+
+  // Bottom Navigation
+  .lesson-vocab-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 16px 0;
+    border-top: 1px solid #e5e5e5;
+    margin-top: auto;
+
+    .nav-button {
+      background: transparent;
+      border: none;
+      color: #b0b0b0;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      transition: all 0.2s ease;
+      border-radius: 4px;
+
+      &:hover:not(:disabled) {
+        color: #f37142;
+        background: #fef5f3;
+      }
+
+      &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+    }
+
+    .nav-info {
+      font-size: 16px;
+      color: #676767;
+      font-weight: 500;
+      min-width: 100px;
+      text-align: center;
+    }
+  }
+}

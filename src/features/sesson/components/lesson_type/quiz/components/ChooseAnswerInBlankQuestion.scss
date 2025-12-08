@@ -1,0 +1,116 @@
+.choose-answer-in-blank-question {
+  width: 100%;
+
+  .choose-answer-in-blank-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #1d2939;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+  }
+
+  .choose-answer-in-blank-text {
+    display: inline;
+  }
+
+  .choose-answer-in-blank-select-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 0 4px;
+    vertical-align: middle;
+  }
+
+  .choose-answer-in-blank-select {
+    min-width: 150px;
+
+    :global(.ant-select-selector) {
+      border: 2px solid #d0d0d0 !important;
+      border-radius: 6px !important;
+      font-size: 15px !important;
+      transition: all 0.3s ease !important;
+      min-height: 40px !important;
+      padding: 4px 11px !important;
+
+      &:hover {
+        border-color: #f37142 !important;
+      }
+    }
+
+    :global(.ant-select-focused .ant-select-selector) {
+      border-color: #f37142 !important;
+      box-shadow: 0 0 0 3px rgba(243, 113, 66, 0.1) !important;
+    }
+
+    &.correct {
+      :where(
+          .css-dev-only-do-not-override-7t2xvq
+        ).ant-select-outlined.ant-select-disabled:not(
+          .ant-select-customize-input
+        )
+        .ant-select-selector {
+        border-color: #10b981 !important;
+        background-color: #d1fae5 !important;
+      }
+
+      :global(.ant-select-selection-item) {
+        color: #065f46 !important;
+      }
+
+      .choose-answer-in-blank-icon-check {
+        color: #10b981 !important;
+        font-size: 14px !important;
+      }
+
+      // Keep colors when disabled
+      :global(.ant-select-disabled .ant-select-selector) {
+        border-color: #10b981 !important;
+        background-color: #d1fae5 !important;
+        cursor: not-allowed !important;
+        opacity: 1 !important;
+      }
+
+      :global(.ant-select-disabled .ant-select-selection-item) {
+        color: #065f46 !important;
+      }
+    }
+
+    &.incorrect {
+      :global(.ant-select-selector) {
+        border-color: #ef4444 !important;
+        background-color: #fee2e2 !important;
+      }
+
+      :global(.ant-select-selection-item) {
+        color: #991b1b !important;
+      }
+
+      .choose-answer-in-blank-icon-close {
+        color: #ef4444 !important;
+        font-size: 14px !important;
+      }
+
+      // Keep colors when disabled
+      :global(.ant-select-disabled .ant-select-selector) {
+        border-color: #ef4444 !important;
+        background-color: #fee2e2 !important;
+        cursor: not-allowed !important;
+        opacity: 1 !important;
+      }
+
+      :global(.ant-select-disabled .ant-select-selection-item) {
+        color: #991b1b !important;
+      }
+    }
+
+    // Default disabled state (when not correct/incorrect)
+    :global(.ant-select-disabled .ant-select-selector) {
+      cursor: not-allowed !important;
+      background-color: #f9fafb !important;
+      opacity: 0.8 !important;
+    }
+  }
+}

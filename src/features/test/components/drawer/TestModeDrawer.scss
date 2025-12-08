@@ -1,0 +1,189 @@
+// Test Mode Mobile Drawer
+:global(.test-mode-mobile-drawer) {
+  .ant-drawer-header {
+    display: none !important;
+  }
+
+  .ant-drawer-content-wrapper {
+    height: fit-content !important;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .ant-drawer-body {
+    padding: 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    height: fit-content !important;
+
+    @media (max-width: 768px) {
+      padding: 20px !important;
+      gap: 20px !important;
+    }
+  }
+}
+
+.test-mode-mobile-drawer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px 20px 40px;
+  @media (max-width: 768px) {
+    gap: 20px;
+  }
+
+  // Timer - giống sidebar
+  .test-mode-timer {
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e5e7eb;
+
+    @media (max-width: 768px) {
+      padding-bottom: 20px;
+    }
+
+    .test-mode-timer-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: #676767;
+      margin-bottom: 8px;
+
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
+    }
+
+    .test-mode-timer-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1d2939;
+      font-family: 'FSPFBeauSansPro', sans-serif;
+
+      @media (max-width: 768px) {
+        font-size: 20px;
+      }
+    }
+  }
+
+  // Question List - giống sidebar
+  .test-mode-question-list {
+    .test-mode-question-list-header {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1d2939;
+      margin-bottom: 16px;
+      font-family: 'FSPFBeauSansPro', sans-serif;
+
+      @media (max-width: 768px) {
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+    }
+
+    .test-mode-question-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+
+      @media (max-width: 768px) {
+        gap: 6px;
+      }
+
+      .test-mode-question-number-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        border-radius: 8px;
+        background-color: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        color: #1d2939;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        @media (max-width: 768px) {
+          height: 36px;
+          font-size: 12px;
+        }
+
+        &:hover {
+          background-color: #e5e7eb;
+          border-color: #2563eb;
+        }
+
+        &.current {
+          border: 1px solid var(--Orange-500, #f37142);
+          background: var(--Orange-25, #fff7f4);
+          color: var(--Orange-500, #f37142);
+        }
+
+        &.answered {
+          border: 1px solid var(--Orange-500, #f37142);
+          background: var(--Orange-25, #fff7f4);
+          color: var(--Orange-500, #f37142);
+        }
+      }
+    }
+  }
+
+  // Action Buttons - giống sidebar
+  .test-mode-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+
+    @media (max-width: 768px) {
+      gap: 10px;
+      padding-top: 20px;
+    }
+
+    .test-mode-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      width: 100%;
+
+      @media (max-width: 768px) {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+
+      &.test-mode-action-btn-exit {
+        background-color: #f4f4f4;
+        color: #1d2939;
+        border: 1px solid #e5e7eb;
+
+        &:hover {
+          background-color: #e5e7eb;
+        }
+      }
+
+      &.test-mode-action-btn-primary {
+        background: #f37142;
+        border: 1px solid #ad502f;
+        border-bottom: 4px solid #ad502f;
+        color: white;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(243, 113, 66, 0.3);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+}

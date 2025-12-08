@@ -1,0 +1,120 @@
+.matching-question {
+  width: 100%;
+
+  .matching-question-content {
+    margin-bottom: 24px;
+
+    .matching-question-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #1d2939;
+      font-weight: 500;
+    }
+  }
+
+  .matching-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  .matching-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .matching-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 60px;
+
+    &:hover {
+      border-color: #d0d0d0;
+      background: #fafafa;
+    }
+
+    &.selected {
+      border-color: #f37142;
+      background: #fff7f4;
+    }
+
+    &.selecting {
+      border-color: #f37142;
+      background: #fff7f4;
+      box-shadow: 0 0 0 3px rgba(243, 113, 66, 0.2);
+    }
+
+    &.matched {
+      // Matched items will have inline styles for colors
+      font-weight: 500;
+    }
+
+    &.correct {
+      border-color: #10b981 !important;
+      background: #d1fae5 !important;
+      
+      .matching-item-number,
+      .matching-item-letter,
+      .matching-item-text {
+        color: #065f46 !important;
+      }
+    }
+
+    &.incorrect {
+      border-color: #ef4444 !important;
+      background: #fee2e2 !important;
+      
+      .matching-item-number,
+      .matching-item-letter,
+      .matching-item-text {
+        color: #991b1b !important;
+      }
+    }
+  }
+
+  .matching-item-number,
+  .matching-item-letter {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1d2939;
+    flex-shrink: 0;
+    min-width: 24px;
+
+    .matching-item.correct & {
+      color: #065f46;
+    }
+
+    .matching-item.incorrect & {
+      color: #991b1b;
+    }
+  }
+
+  .matching-item-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1d2939;
+    flex: 1;
+
+    .matching-item.correct & {
+      color: #065f46;
+    }
+
+    .matching-item.incorrect & {
+      color: #991b1b;
+    }
+  }
+}
+

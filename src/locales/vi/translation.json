@@ -1,0 +1,342 @@
+{
+  "header": {
+    "logoAlt": "logo",
+    "nav": {
+      "dailyTest": "Thi thử mỗi ngày",
+      "topics": "Chủ đề",
+      "learning": "Học tập",
+      "myClass": "Lớp học của tôi"
+    },
+    "language": {
+      "vi": "VI"
+    },
+    "login": "Đăng nhập",
+    "profile": "Thông tin cá nhân",
+    "class": "Lớp học của tôi",
+    "list-exam": "Lịch sử thi thử",
+    "logout": "Đăng xuất"
+  },
+  "login": {
+    "title": "Đăng nhập",
+    "subtitle": "Sử dụng tài khoản được cấp để đăng nhập vào hệ thống",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "forgotPassword": "Quên mật khẩu?",
+    "createAccount": "Tạo tài khoản",
+    "rememberLogin": "Lưu thông tin đăng nhập",
+    "welcome": "Chào mừng đến với Mankai Academy"
+  },
+  "register": {
+    "title": "Tạo tài khoản",
+    "subtitle": "Sử dụng tài khoản được cấp để đăng nhập vào hệ thống",
+    "fullName": "Họ và tên",
+    "phoneNumber": "Số điện thoại",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "placeholder": {
+      "fullName": "Nhập họ và tên",
+      "phoneNumber": "Nhập số điện thoại",
+      "email": "Nhập email",
+      "password": "Nhập mật khẩu",
+      "confirmPassword": "Nhập lại mật khẩu"
+    }
+  },
+  "teacher": {
+    "ceremony": "Khai Giảng",
+    "end": "Kết thúc",
+    "sensei": "Giảng viên"
+  },
+  "class": {
+    "room": "Lịch học",
+    "result": "Kết quả học tập",
+    "session": "Buổi",
+    "date": "Ngày",
+    "status": "Trạng thái",
+    "completedLate": "Hoàn thành muộn",
+    "doneTask": "Hoàn thành",
+    "late": "Trễ",
+    "notDone": "Chưa hoàn thành",
+    "noLesson": "Chưa có bài học",
+    "noResult": "Chưa có dữ liệu kết quả"
+  },
+  "banner": {
+    "homeText": "Trang chủ",
+    "courseText": "Khóa học online",
+    "streaks": "Streaks",
+    "ranking": "Bảng xếp hạng",
+    "experiencePoints": "Điểm kinh nghiệm",
+    "userName": "Nguyễn C",
+    "userEmail": "Hoangbaohs22@gmail.com",
+    "userLocation": "Đông Anh, Hà Nội",
+    "course": "Các khóa học",
+    "topic": "Tiếng Nhật theo chủ đề",
+    "mocktest": "Thi thử cùng Mankai",
+    "examTest": "Đề thi",
+    "loading": "Đang tải",
+    "btnSub": "Nộp bài",
+    "dateExam": "Ngày thi",
+    "point": "Điểm",
+    "part": "Phần",
+    "audio": "Trình duyệt của bạn không hỗ trợ phát audio.",
+    "headings": {
+      "learn": "HỌC DỄ DÀNG",
+      "practice": "LUYỆN HIỆU QUẢ",
+      "test": "THI TỰ TIN"
+    },
+    "features": {
+      "lecture": "Bài giảng chất lượng và dễ hiểu",
+      "path": "Lộ trình học rõ ràng, dễ theo sát",
+      "exercise": "Bài tập thực hành và kiểm tra ngay"
+    },
+    "cta": "KHÁM PHÁ NGAY"
+  },
+  "mocktest": {
+    "exam": "Bài thi",
+    "examTest": "đề thi",
+    "participants": "người tham gia",
+    "btnSub": "Tham gia ngay",
+    "time": "phút",
+    "btnTestExam": "Vào thi ngay",
+    "structure": "Cấu trúc bài thi",
+    "timeTitle": "Thời gian",
+    "numberQuestion": "Số câu hỏi",
+    "number": "câu",
+    "back": "Quay lại",
+    "btnSubmitNow": "Vào bài thi",
+    "contentQuestion": "Nội dung nhóm câu hỏi",
+    "groupQuestion": "Nhóm câu hỏi ",
+    "listQuestion": "Danh sách câu hỏi",
+    "noneExplain": "Ân giải thích",
+    "showExplain": "Xem giải thích",
+    "explain": "Giải thích",
+    "timer": "Thời gian còn lại",
+    "exit": "Thoát",
+    "btnExit": "Hủy",
+    "btnDone": "Xác nhận",
+    "next": "Làm tiếp",
+    "view": "Xem lại",
+    "home": "Về trang chủ",
+    "point": "Số điểm bạn đạt được",
+    "backNavigate": "Tiếp tục thi",
+    "changeNext": "Chuyển phần",
+    "titleWaringNext": "Bạn xác nhận chuyển phần?",
+    "textMess": "Hãy đảm bảo bạn đã hoàn thành toàn bộ phần thi để đạt được kết quả tốt nhất!",
+    "titleWaringExam": "Bạn xác nhận thoát bài thi?",
+    "textMessExam": "Kết quả bài thi của bạn sẽ được tự động lưu lại trong hệ thống.",
+    "titleWaringSub": "Bạn xác nhận nộp bài?",
+    "textMessSub": "Hãy đảm bảo bạn đã hoàn thành toàn bộ phần thi để đạt được kết quả tốt nhất!"
+  },
+  "courses": {
+    "title": "Khóa học của bạn",
+    "viewAll": "Xem tất cả",
+    "titleCourse": "Các khóa học"
+  },
+  "historyExam": {
+    "titleHistoryExam": "Lịch sử thi",
+    "numberExam": "Câu",
+    "answer": "Đáp án của bạn:",
+    "answerDone": "Đáp án đúng:",
+    "titleHistory": "Lịch sử bài làm",
+    "noTitleHistory": "Chưa có lịch sử bài làm",
+    "noAnswer": "Không trả lời",
+    "point": "điểm"
+  },
+  "footer": {
+    "title": "HỌC VIỆN ĐÀO TẠO VÀ PHÁT TRIỂN TIẾNG NHẬT THỰC CHIẾN",
+    "contactInfo": {
+      "title": "THÔNG TIN LIÊN HỆ",
+      "address": "Địa chỉ:",
+      "addressText": "Tòa nhà Sông Đà, Đường Phạm Hùng, Mỹ Đình, Nam Từ Liêm, Hà Nội",
+      "hotline": "Hotline:",
+      "hotlineText": "0835 662 538",
+      "email": "Email:",
+      "emailText": "support@mankai.edu.vn"
+    },
+    "quickLinks": {
+      "title": "LIÊN KẾT NHANH",
+      "links": [
+        "Giới thiệu",
+        "JLPT",
+        "Kaiwa",
+        "Sơ cấp",
+        "IT Talk",
+        "Tokutei",
+        "Đào tạo Doanh ngiệp",
+        "Bảng vàng Mankai",
+        "Tin tức",
+        "Liên hệ"
+      ]
+    },
+    "followUs": {
+      "title": "THEO DÕI CHÚNG TÔI TẠI",
+      "socialMedia": ["Facebook", "Youtube"]
+    },
+    "copyright": {
+      "text": "Copyright 2024 By Mankai Academy - All rights reserved"
+    }
+  },
+  "coursesSlider": {
+    "title": "Khóa học của bạn",
+    "viewAll": "Xem tất cả",
+    "status": "Hoàn thành",
+    "nextLesson": "Bài tiếp theo",
+    "courseDetails": {
+      "textCourse": "bài học",
+      "name": "Khóa học",
+      "progress": "Hoàn thành",
+      "lessonStatus": "Còn 16 bài chưa học",
+      "contentOne": "Còn",
+      "contentTwo": "bài chưa học"
+    },
+    "button": {
+      "continue": "Tiếp tục học"
+    },
+    "slider": {
+      "dots": {
+        "inactive": "#D0D5DD",
+        "active": "#F37142"
+      }
+    }
+  },
+  "specialRanking": {
+    "title": "Học cùng Mankai",
+    "kaiwa": "Kaiwa AI",
+    "minna": "Học từ vựng Minna",
+    "testMankai": "Thi thử cùng Mankai",
+    "kanji": "Kanji Mnemonic",
+    "button": "Khám phá ngay",
+    "listDesc": {
+      "kaiwa": "Luyện tập hội thoại Tiếng Nhật mọi lúc mọi nơi với AI",
+      "minna": "Học Tiếng Nhật theo chủ đề đa dạng, từ giao tiếp hàng ngày đến chuyên ngành",
+      "testMankai": "Kiểm tra trình độ Tiếng Nhật của bạn với các bài thi thử mô phỏng thực tế",
+      "kanji": "Phương pháp ghi nhớ chữ Hán (Kanji) mẹo nhớ từ"
+    },
+    "description": "Khám phá các khóa học Tiếng Nhật đa cấp độ, từ cơ bản đến nâng cao",
+
+    "ranking": {
+      "title": "Bảng xếp hạng",
+      "imageAlt": "cup",
+      "text": "Bảng xếp hạng",
+      "crownAlt": "Vương miện",
+      "avatarAlt": "Ảnh",
+      "starAlt": "Ngôi sao"
+    }
+  },
+  "startJourney": {
+    "title": "Khởi động hành trình của bạn",
+    "description": "Hãy bước vào hành trình mới để khám phá tiềm năng và chinh phục những mục tiêu của bạn ngay hôm nay.",
+    "contact": "Liên hệ",
+    "sales": {
+      "text": "Nhận tư vấn",
+      "iconAlt": "ArrowUpRight"
+    }
+  },
+  "streak": {
+    "text": "Streaks",
+    "textDate": "Tháng 4, 2025",
+    "week": "Tuần 3/4",
+    "fireAlt": "Lửa Streaks"
+  },
+  "profile": {
+    "textAccount": "Thông tin tài khoản",
+    "contentAccount": "Bạn có thể chỉnh sửa thông tin cá nhân tại đây",
+    "filterProfile": "Thông tin cá nhân",
+    "changePass": "Thay đổi mật khẩu",
+    "btnSubmit": "Lưu thông tin"
+  },
+  "weekDays": {
+    "T2": "T2",
+    "T3": "T3",
+    "T4": "T4",
+    "T5": "T5",
+    "T6": "T6",
+    "T7": "T7",
+    "CN": "CN"
+  },
+  "topic": {
+    "title": "Chủ đề",
+    "vocabulary": "từ vựng",
+    "resultVoice": "Kết quả giọng nói:",
+    "voiceRun": "Đang nghe bạn nói...",
+    "voiceFasle": "Không nghe được.",
+    "titleVocabulary": "Từ vựng",
+    "retry": "Thử lại"
+  },
+  "detailCourse": {
+    "nameCourse": "Khóa học",
+    "list": "Danh sách bài",
+    "listEle": "Danh sách bài học",
+    "video": "videos",
+    "time": "phút",
+    "session": "bài Test",
+    "complete": "Hoàn thành"
+  },
+  "vocabulary": {
+    "placeholderComment": "Bạn muốn thảo luận vấn đề gì?",
+    "comment": "bình luận",
+    "feedback": "Phản hồi",
+    "filter": {
+      "describe": "Mô tả",
+      "document": "Tài liệu",
+      "discuss": "Thảo luận"
+    },
+    "formVideo": {
+      "textTitle": "Bài giảng chuẩn hóa bởi chuyên gia hàng đầu.",
+      "textSession": "Bài tiếp theo",
+      "textTitleWarring": "Bạn không thể tua nhanh video !",
+      "textPing": "Bạn cần hoàn thành toàn việc xem bài giảng ở lần đầu tiên.",
+      "btnSession": "Thoát",
+      "btnSessionNext": "Xem tiếp",
+      "progress": "Tiến trình"
+    }
+  },
+  "titleVocabulary": {
+    "descriptionFl": "Vừa nghe vừa đọc - học dễ hơn, nhớ lâu hơn.",
+    "descriptionPdf": "Chậm rãi đọc, từ tốn hiểu - nắm chắc kiến thức theo cách của bạn.",
+    "descriptionExam": "Vừa nghe vừa đọc - học dễ hơn, nhớ lâu hơn.",
+    "descriptionVideo": "Bài giảng chuẩn hóa bởi chuyên gia hàng đầu.",
+    "booknew": "Học từ mới",
+    "game": "Trò chơi ôn tập",
+    "cardmerge": "Trò chơi ghép thẻ",
+    "examNew": "Kiểm tra từ mới"
+  },
+  "exam": {
+    "contentTitle": "Nội dung đề bài",
+    "contentTitleAudio": "Chọn từ vào ô trống",
+    "reload": "Làm lại",
+    "previous": "Câu trước",
+    "check": "Kiểm tra",
+    "textSuccess": "Chính xác! Làm tốt lắm",
+    "contentSuccess": "Hãy tiếp tục phát huy",
+    "continue": "Tiếp tục",
+    "textSuccessFasle": "Chưa chính xác!",
+    "modalTitle": "Hoàn thành bài học!",
+    "modalText": "Điểm của bạn",
+    "continueStudying": "Học tiếp"
+  },
+  "flashCard": {
+    "cardMergeTitle": "Thời gian kiểm tra",
+    "second": "giây"
+  },
+  "file": {
+    "upload": "Tải File xuống",
+    "btnUpload": "Nộp bài tập",
+    "timeUpload": "Thời gian nộp",
+    "uploadDone": "Đã nộp",
+    "addUpload": "Thêm tài liệu",
+    "clickUpload": "Nhấp để tải lên",
+    "textUpload": "thêm và chỉnh sửa tại đây.",
+    "note": "Lưu ý:",
+    "textNote": "Việc cập nhật tệp sẽ làm mất tệp cũ.",
+    "viewFile": "Xem file"
+  },
+  "dictionary": {
+    "kanjiLookupLabel": "Tra cứu Kanji",
+    "searchLabel": "Tìm kiếm",
+    "vocabularySearchLabel": "Tìm kiếm từ vựng",
+    "meaningLabel": "Ý nghĩa",
+    "suggestionLabel": "Gợi ý",
+    "vocabularyLabel": "Từ vựng"
+  }
+}

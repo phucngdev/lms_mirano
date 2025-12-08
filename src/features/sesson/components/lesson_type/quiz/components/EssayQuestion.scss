@@ -1,0 +1,168 @@
+.essay-question {
+  width: 100%;
+
+  .essay-question-content {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 12px;
+    border-left: 4px solid #f37142;
+
+    .essay-question-text {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #1d2939;
+
+      @media (max-width: 768px) {
+        font-size: 14px;
+      }
+
+      // Style for CKEditor content
+      :global(p) {
+        margin: 0 0 12px 0;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      :global(ul),
+      :global(ol) {
+        margin: 12px 0;
+        padding-left: 24px;
+      }
+
+      :global(li) {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .essay-question-upload {
+    .essay-question-upload-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1d2939;
+
+      .essay-question-upload-icon {
+        font-size: 20px;
+        color: #f37142;
+      }
+
+      .essay-question-upload-limit {
+        margin-left: auto;
+        font-size: 14px;
+        font-weight: 400;
+        color: #6b7280;
+      }
+    }
+
+    .essay-question-upload-button {
+      height: 44px;
+      padding: 0 24px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 2px solid #f37142;
+      color: #f37142;
+      background: white;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #f37142;
+        color: white;
+        border-color: #f37142;
+      }
+    }
+
+    .essay-question-file-list {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .essay-question-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        text-align: center;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 2px dashed #e5e7eb;
+        border-radius: 8px;
+
+        .essay-question-empty-icon {
+          font-size: 48px;
+          color: #d1d5db;
+          margin-bottom: 12px;
+        }
+
+        span {
+          font-size: 14px;
+        }
+      }
+
+      .essay-question-file-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #f3f4f6;
+          border-color: #d1d5db;
+        }
+
+        .essay-question-file-icon {
+          font-size: 20px;
+          color: #f37142;
+          flex-shrink: 0;
+        }
+
+        .essay-question-file-info {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          min-width: 0;
+        }
+
+        .essay-question-file-name {
+          font-size: 14px;
+          color: #1d2939;
+          font-weight: 500;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .essay-question-file-size {
+          font-size: 12px;
+          color: #6b7280;
+        }
+
+        .essay-question-file-remove {
+          color: #ef4444;
+          padding: 4px 8px;
+          flex-shrink: 0;
+
+          &:hover {
+            background: #fee2e2;
+            color: #dc2626;
+          }
+        }
+      }
+    }
+  }
+}
+

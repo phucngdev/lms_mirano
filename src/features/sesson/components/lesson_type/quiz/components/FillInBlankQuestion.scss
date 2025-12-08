@@ -1,0 +1,117 @@
+.fill-in-blank-question {
+  width: 100%;
+
+  .fill-in-blank-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #1d2939;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+  }
+
+  .fill-in-blank-text {
+    display: inline;
+  }
+
+  .fill-in-blank-input-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 0 4px;
+    vertical-align: middle;
+  }
+
+  .fill-in-blank-input {
+    min-width: 80px;
+    padding: 8px 12px;
+    border: 2px solid #d0d0d0;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: 'Courier New', monospace;
+    background: white;
+    color: #1d2939;
+    transition: all 0.3s ease;
+    outline: none;
+
+    &:focus {
+      border-color: #f37142;
+      box-shadow: 0 0 0 3px rgba(243, 113, 66, 0.1);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      background: #f9fafb;
+    }
+
+    &.correct {
+      border-color: #10b981;
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    &.incorrect {
+      border-color: #ef4444;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  .fill-in-blank-icon {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    pointer-events: none;
+
+    &.fill-in-blank-icon-check {
+      color: #10b981;
+    }
+
+    &.fill-in-blank-icon-close {
+      color: #ef4444;
+    }
+  }
+
+  .fill-in-blank-output {
+    margin-top: 24px;
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border-left: 4px solid #10b981;
+
+    @media (max-width: 768px) {
+      margin-top: 20px;
+      padding: 12px;
+    }
+  }
+
+  .fill-in-blank-output-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1d2939;
+    margin-bottom: 8px;
+  }
+
+  .fill-in-blank-output-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #10b981;
+    font-family: 'Courier New', monospace;
+    padding: 8px 12px;
+    background: white;
+    border: 2px solid #10b981;
+    border-radius: 6px;
+    display: inline-block;
+    min-width: 60px;
+  }
+}
+

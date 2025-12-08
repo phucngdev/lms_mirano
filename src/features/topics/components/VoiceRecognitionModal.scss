@@ -1,0 +1,142 @@
+.voice-recognition-modal {
+  .ant-modal-content {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+}
+
+.voice-modal-content {
+  padding: 24px;
+
+  .voice-listening-indicator {
+    background: #fff5f2;
+    border: 1px solid #ffd4c4;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    color: #f37142;
+    font-weight: 500;
+    margin-bottom: 24px;
+    font-size: 16px;
+  }
+
+  .voice-result-box {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+    text-align: center;
+
+    .voice-result-label {
+      color: #16a34a;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .voice-result-word {
+      color: #1d2939;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      font-family: 'FSPFBeauSansPro', sans-serif;
+    }
+
+    .voice-result-stars {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 12px;
+
+      .star {
+        font-size: 32px;
+        color: #d1d5db;
+
+        &.filled {
+          color: #fbbf24;
+        }
+      }
+    }
+
+    .voice-result-feedback {
+      color: #f37142;
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+
+  .voice-vocab-section {
+    margin-bottom: 24px;
+
+    .voice-vocab-label {
+      font-size: 14px;
+      color: #676767;
+      margin-bottom: 8px;
+    }
+
+    .voice-vocab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .voice-vocab-word {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1d2939;
+        font-family: 'FSPFBeauSansPro', sans-serif;
+      }
+
+      .voice-vocab-icons {
+        display: flex;
+        gap: 8px;
+
+        .voice-icon-button {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          padding: 0;
+          background: transparent;
+
+          &.voice-icon-mic {
+            background-color: #fff5f2;
+
+            &:hover {
+              background-color: #ffe5dc;
+            }
+          }
+
+          &.voice-icon-speaker {
+            background-color: #e6f7ff;
+
+            &:hover {
+              background-color: #bae7ff;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .voice-info-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .voice-info-box {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 16px;
+      color: #1d2939;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+  }
+}

@@ -1,0 +1,207 @@
+.banner {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-image: url('/src/assets/images/banner/bannerMankai.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0 0 16px 16px;
+
+  .banner-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+    padding: 60px 0;
+
+    @media (max-width: 1024px) {
+      flex-direction: column;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      padding: 20px 0;
+    }
+  }
+
+  .banner-left {
+    flex: 1;
+    max-width: 600px;
+    color: white;
+    z-index: 2;
+
+    @media (max-width: 1024px) {
+      max-width: 100%;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 768px) {
+      margin-bottom: 0;
+    }
+  }
+
+  .banner-headings {
+    margin-bottom: 40px;
+
+    .banner-heading {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0;
+      color: #fff;
+      font-family: 'FSPFBeauSansPro', sans-serif;
+
+      @media (max-width: 768px) {
+        font-size: 32px;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 28px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      margin-bottom: 30px;
+    }
+  }
+
+  .banner-features {
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media (max-width: 768px) {
+      margin-bottom: 30px;
+      gap: 15px;
+    }
+  }
+
+  .banner-feature {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 20px;
+      bottom: -25px;
+      width: 2px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.3);
+
+      @media (max-width: 768px) {
+        bottom: -20px;
+      }
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #f37142;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+    }
+
+    .feature-text {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: white;
+
+      @media (max-width: 768px) {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .banner-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    background: white;
+    color: #f37142;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'FSPFBeauSansPro', sans-serif;
+
+    svg {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+      svg {
+        transform: translateX(4px);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      padding: 12px 24px;
+      font-size: 14px;
+    }
+  }
+
+  .banner-right {
+    flex: 1;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    @media (max-width: 1024px) {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+
+  .banner-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 500px;
+    border-radius: 8px;
+
+    @media (max-width: 1024px) {
+      max-height: 400px;
+    }
+
+    @media (max-width: 768px) {
+      max-height: 300px;
+    }
+  }
+}

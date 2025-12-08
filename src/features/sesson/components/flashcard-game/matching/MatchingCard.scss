@@ -1,0 +1,295 @@
+.matching-card-container {
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 200px);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  background-image: url('/src/assets/images/GlobalVocabulary/bgFlashCard.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  background-repeat: no-repeat;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at 20% 50%,
+        rgba(255, 235, 205, 0.3) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 80%,
+        rgba(255, 218, 185, 0.3) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+  }
+}
+
+.matching-card-content {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.matching-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.timer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.timer-label {
+  color: #8b4513;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'FS PF BeauSans Pro', sans-serif;
+}
+
+.timer-value {
+  background: #ad7415;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'FS PF BeauSans Pro', sans-serif;
+  box-shadow: 0 2px 8px rgba(255, 140, 66, 0.3);
+}
+
+.exit-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 20px;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+.card-item {
+  aspect-ratio: 1;
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+
+  &.card-default {
+    border-color: transparent;
+
+    .card-text {
+      color: #333;
+    }
+  }
+
+  &.card-selected {
+    border-radius: 8px;
+    border: 1px solid var(--Blue-light-500, #0ba5ec);
+    background: var(--Blue-light-50, #f0f9ff);
+    box-shadow: 0 4px 0 0 #0ba5ec;
+  }
+
+  &.card-correct {
+    border-radius: 8px;
+    border: 1px solid var(--Success-500, #12b76a);
+    background: var(--Success-50, #ecfdf3);
+    box-shadow: 0 4px 0 0 #12b76a;
+    transition: all 0.3s ease;
+  }
+
+  &.card-incorrect {
+    border-radius: 8px;
+    border: 1px solid var(--Error-500, #f04438);
+    background: var(--Error-50, #fef3f2);
+    box-shadow: 0 4px 0 0 #f04438;
+    transition: all 0.3s ease;
+  }
+
+  &.card-matched {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+    transition: all 0.5s ease;
+  }
+}
+
+.card-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-text {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  color: #333;
+  font-family: 'FS PF BeauSans Pro', sans-serif;
+  word-break: break-word;
+  line-height: 1.4;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+}
+
+.game-complete-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.complete-content {
+  background: white;
+  border-radius: 24px;
+  padding: 3rem;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+
+  h2 {
+    color: #ff8c42;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-family: 'FS PF BeauSans Pro', sans-serif;
+  }
+
+  p {
+    color: #666;
+    font-size: 18px;
+    font-family: 'FS PF BeauSans Pro', sans-serif;
+  }
+
+  .game-complete-message-button {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .game-complete-message-button-retry {
+    width: 100%;
+    padding: 1rem 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--Yellow-700, #b5b5b5);
+    border-bottom: 4px solid var(--Yellow-700, #b5b5b5);
+    background: var(--White, #fff);
+    box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
+    color: var(--Gray-300, #b5b5b5);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+    cursor: pointer;
+  }
+
+  .game-complete-message-button-continue {
+    width: 100%;
+    padding: 1rem 2rem;
+    border-radius: 20px;
+    border-radius: 16px;
+    border: 1px solid var(--Yellow-700, #ad7415);
+    border-bottom: 4px solid var(--Yellow-700, #ad7415);
+    background: var(--Yellow-400, #f5b64a);
+    box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
+    color: var(--White, #fff);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+    cursor: pointer;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

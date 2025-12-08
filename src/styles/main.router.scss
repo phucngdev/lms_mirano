@@ -1,0 +1,22 @@
+.main-content {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 80px;
+  margin-top: 92px;
+
+  @media (max-width: 1024px) {
+    padding: 0 24px;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 64px;
+  }
+
+  // Full width for sesson detail page
+  :global(.sesson-detail) {
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+  }
+}

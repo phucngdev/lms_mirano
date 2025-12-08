@@ -1,0 +1,208 @@
+.profile-page {
+  width: 100%;
+  padding: 40px 0;
+  background-color: #f5fbff;
+  min-height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 24px 0;
+  }
+
+  .profile-page-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    // padding: 0 24px;
+
+    @media (max-width: 768px) {
+      padding: 0 16px;
+    }
+
+    .profile-page-title {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #1d2939;
+      margin: 0 0 32px 0;
+      font-family: 'FSPFBeauSansPro', sans-serif;
+
+      @media (max-width: 768px) {
+        font-size: 24px;
+        margin-bottom: 24px;
+      }
+    }
+  }
+
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    @media (max-width: 768px) {
+      gap: 16px;
+    }
+  }
+
+  .profile-header-card {
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .profile-header {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 24px;
+      }
+
+      .profile-avatar-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+
+        .profile-avatar {
+          border: 4px solid #f37142;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar-upload-button {
+          border-radius: 8px;
+          border-color: #f37142;
+          color: #f37142;
+
+          &:hover {
+            background-color: #fff1f2;
+            border-color: #f37142;
+          }
+        }
+      }
+
+      .profile-info-section {
+        flex: 1;
+
+        .profile-name {
+          font-size: 28px;
+          font-weight: 700;
+          color: #1d2939;
+          margin: 0 0 8px 0;
+          font-family: 'FSPFBeauSansPro', sans-serif;
+
+          @media (max-width: 768px) {
+            font-size: 24px;
+          }
+        }
+
+        .profile-email {
+          font-size: 16px;
+          color: #676767;
+          margin: 0 0 16px 0;
+        }
+
+        .profile-meta {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .profile-meta-item {
+            font-size: 14px;
+            color: #676767;
+          }
+        }
+      }
+    }
+  }
+
+  .profile-form-card {
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    :global(.ant-tabs-card) {
+      .ant-tabs-tab {
+        border-radius: 8px 8px 0 0;
+      }
+
+      .ant-tabs-content {
+        padding: 24px 0;
+      }
+    }
+
+    .profile-form,
+    .password-form {
+      max-width: 800px;
+
+      .form-row {
+        margin-bottom: 0;
+
+        &.form-row-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+
+          @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        :global(.ant-form-item) {
+          margin-bottom: 24px;
+
+          :global(.ant-form-item-label) {
+            label {
+              font-size: 14px;
+              font-weight: 600;
+              color: #1d2939;
+            }
+          }
+
+          :global(.ant-input),
+          :global(.ant-select-selector),
+          :global(.ant-picker) {
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+
+            &:hover {
+              border-color: #d1d5db;
+            }
+
+            &:focus,
+            &:focus-within {
+              border-color: #f37142;
+              box-shadow: 0 0 0 3px rgba(243, 113, 66, 0.1);
+            }
+          }
+
+          :global(.ant-input-password) {
+            .ant-input {
+              border: none;
+            }
+
+            &:focus-within {
+              border-color: #f37142;
+              box-shadow: 0 0 0 3px rgba(243, 113, 66, 0.1);
+            }
+          }
+        }
+      }
+
+      .submit-button {
+        height: 48px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        background-color: #f37142;
+        border-color: #f37142;
+        margin-top: 8px;
+
+        &:hover {
+          background-color: #dd673c;
+          border-color: #dd673c;
+        }
+      }
+    }
+  }
+}
