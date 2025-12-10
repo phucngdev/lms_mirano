@@ -17,7 +17,7 @@ function Footer() {
           <div className="footer-top">
             <div className="footer-logo-section">
               <div className="footer-logo">
-                <img src={logoSvg} alt="Mankai Logo" />
+                <img src={logoSvg} alt="Mirano Logo" />
               </div>
               <div className="footer-slogan">{t('footer.title')}</div>
             </div>

@@ -8,22 +8,26 @@ import tduc2Logo from '/src/assets/images/application/tduc01.png';
 import applicationTitleImage from '/src/assets/images/application/icon_title.png';
 import applicationTitleImage02 from '/src/assets/images/application/icon_title02.png';
 import leaderboardContentImage from '/src/assets/images/application/app01.png';
+import { useNavigate } from 'react-router-dom';
 
 interface ApplicationCard {
   id: number;
   title: string;
   description: string;
+  link: string;
   hasStars: boolean;
   image: string | React.ReactNode;
 }
 
 const Application = () => {
+  const navigate = useNavigate();
   const applications: ApplicationCard[] = [
     {
       id: 1,
       title: 'Kaiwa AI',
       description: 'Luyện tập hội thoại Tiếng Nhật mọi lúc mọi nơi với AI',
       hasStars: true,
+      link: '/kaiwa-ai',
       image: (
         <div className="application-card-image application-card-image-ai">
           <img src={aiLogo} alt="Kanji Mnemonic" />
@@ -36,6 +40,7 @@ const Application = () => {
       description:
         'Học Tiếng Nhật theo chủ đề đa dạng, từ giao tiếp hàng ngày đến chuyên ngành',
       hasStars: false,
+      link: '/topics',
       image: (
         <div className="application-card-image application-card-image-tduc">
           <img src={tduc1Logo} alt="Kanji Mnemonic" />
@@ -44,10 +49,11 @@ const Application = () => {
     },
     {
       id: 3,
-      title: 'Thi thử cùng Mankai',
+      title: 'Thi thử cùng Mirano',
       description:
         'Kiểm tra trình độ Tiếng Nhật của bạn với các bài thi thử mô phỏng thực tế',
       hasStars: true,
+      link: '/test-page',
       image: (
         <div className="application-card-image application-card-image-tduc2">
           <img src={tduc2Logo} alt="Kanji Mnemonic" />
@@ -59,6 +65,7 @@ const Application = () => {
       title: 'Kanji Mnemonic',
       description: 'Phương pháp ghi nhớ chữ Hán (Kanji) mẹo nhớ từ',
       hasStars: false,
+      link: '/kanji-mnemonic',
       image: (
         <div className="application-card-image application-card-image-kanji">
           <img src={kanjiLogo} alt="Kanji Mnemonic" />
@@ -103,7 +110,10 @@ const Application = () => {
                       <p className="application-card-description">
                         {application.description}
                       </p>
-                      <button className="application-card-button">
+                      <button
+                        onClick={() => navigate(`${application.link}`)}
+                        className="application-card-button"
+                      >
                         <span>Khám phá ngay</span>
                         <div className="application-card-button-icon">
                           <ArrowRight color="white" width={20} height={20} />

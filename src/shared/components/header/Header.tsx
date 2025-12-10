@@ -37,7 +37,7 @@ export function Header() {
 
   const handleLogout = async () => {
     try {
-      await logoutService();
+      // await logoutService();
       Cookies.remove('user');
       Cookies.remove('accessToken');
       Cookies.remove('refreshToken');

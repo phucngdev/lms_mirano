@@ -1,123 +1,184 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { Spin, message } from 'antd';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
-import { IconMic, IconListen } from '#/assets/svg/externalIcon';
-import { VoiceJapan } from '#/shared/redux/thunk/VoiceJapan';
+import { getAllVocabularyByIdLessionService } from '#/api/services/vocabulary.service';
+import VoiceRecognitionModal from './components/VoiceRecognitionModal';
 import './LessonVocab.scss';
 
-const LessonVocab = () => {
-  const data = {
-    items: [
-      {
-        id: '1',
-        originText: 'ねこ',
-        mean: 'Con mèo',
-        imageUrl: 'https://example.com/images/neko.png',
-        sinoVietNamese: 'Miêu',
-        kanji: '猫',
-        example: '猫が好きです。 (Tôi thích mèo.)',
-        pos: 1,
-      },
-      {
-        id: '2',
-        originText: 'みず',
-        mean: 'Nước',
-        imageUrl: 'https://example.com/images/mizu.png',
-        sinoVietNamese: 'Thủy',
-        kanji: '水',
-        example: '水を飲みます。 (Tôi uống nước.)',
-        pos: 2,
-      },
-      {
-        id: '3',
-        originText: 'やま',
-        mean: 'Núi',
-        imageUrl: 'https://example.com/images/yama.png',
-        sinoVietNamese: 'Sơn',
-        kanji: '山',
-        example: '山に登ります。 (Tôi leo núi.)',
-        pos: 3,
-      },
-      {
-        id: '4',
-        originText: 'くるま',
-        mean: 'Xe hơi',
-        imageUrl: 'https://example.com/images/kuruma.png',
-        sinoVietNamese: 'Xa',
-        kanji: '車',
-        example: '車を運転します。 (Tôi lái xe.)',
-        pos: 4,
-      },
-      {
-        id: '5',
-        originText: 'はな',
-        mean: 'Hoa',
-        imageUrl: 'https://example.com/images/hana.png',
-        sinoVietNamese: 'Hoa',
-        kanji: '花',
-        example: '花がきれいです。 (Hoa đẹp quá.)',
-        pos: 5,
-      },
-      {
-        id: '6',
-        originText: 'ともだち',
-        mean: 'Bạn bè',
-        imageUrl: 'https://example.com/images/tomodachi.png',
-        sinoVietNamese: 'Hữu đạt',
-        kanji: '友達',
-        example: '友達と遊びます。 (Tôi chơi với bạn.)',
-        pos: 6,
-      },
-      {
-        id: '7',
-        originText: 'ほん',
-        mean: 'Sách',
-        imageUrl: 'https://example.com/images/hon.png',
-        sinoVietNamese: 'Bản',
-        kanji: '本',
-        example: '本を読みます。 (Tôi đọc sách.)',
-        pos: 7,
-      },
-      {
-        id: '8',
-        originText: 'そら',
-        mean: 'Bầu trời',
-        imageUrl: 'https://example.com/images/sora.png',
-        sinoVietNamese: 'Không',
-        kanji: '空',
-        example: '空が青いです。 (Bầu trời thật xanh.)',
-        pos: 8,
-      },
-      {
-        id: '9',
-        originText: 'あめ',
-        mean: 'Mưa',
-        imageUrl: 'https://example.com/images/ame.png',
-        sinoVietNamese: 'Vũ',
-        kanji: '雨',
-        example: '雨が降っています。 (Trời đang mưa.)',
-        pos: 9,
-      },
-      {
-        id: '10',
-        originText: 'ひと',
-        mean: 'Người',
-        imageUrl: 'https://example.com/images/hito.png',
-        sinoVietNamese: 'Nhân',
-        kanji: '人',
-        example: 'あの人は先生です。 (Người kia là thầy giáo.)',
-        pos: 10,
-      },
-    ],
+// Speech Recognition Types
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionResult {
+  [index: number]: SpeechRecognitionAlternative;
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+}
+
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+  message: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+  lang: string;
+  interimResults: boolean;
+  continuous: boolean;
+  onstart?: () => void;
+  onresult?: (event: SpeechRecognitionEvent) => void;
+  onerror?: (event: SpeechRecognitionErrorEvent) => void;
+  onend?: () => void;
+  start: () => void;
+  stop: () => void;
+  abort: () => void;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: {
+      new (): SpeechRecognition;
+    };
+    webkitSpeechRecognition: {
+      new (): SpeechRecognition;
+    };
+  }
+}
+
+interface VocabularyItem {
+  id: string;
+  originText: string;
+  mean: string;
+  imageUrl: string;
+  sinoVietNamese: string;
+  kanji: string;
+  example: string;
+  pos: number;
+}
+
+interface VocabularyResponse {
+  statusCode: number;
+  data: {
+    items: VocabularyItem[];
     meta: {
-      limit: 10,
-      offset: 0,
-      total: 10,
-      totalPages: 1,
-    },
+      limit: number;
+      offset: number;
+      total: number;
+      totalPages: number;
+    };
+  };
+}
+
+const LessonVocab = () => {
+  const { lessonId } = useParams<{ lessonId: string }>();
+  const [vocabularies, setVocabularies] = useState<VocabularyItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [voiceResult, setVoiceResult] = useState<{
+    recognizedText: string;
+    score: number;
+    feedback: string;
+  } | null>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  const fetchVocabularies = async () => {
+    if (!lessonId) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      // Gọi API với limit lớn để lấy tất cả từ vựng
+      const response = await getAllVocabularyByIdLessionService(
+        lessonId,
+        1000,
+        0,
+      );
+      const apiData = response.data as VocabularyResponse;
+
+      if (apiData.statusCode === 200 && apiData.data?.items) {
+        // Sắp xếp theo pos để đảm bảo thứ tự đúng
+        const sortedItems = [...apiData.data.items].sort(
+          (a, b) => a.pos - b.pos,
+        );
+        setVocabularies(sortedItems);
+      }
+    } catch (error) {
+      console.error('Error fetching vocabularies:', error);
+      message.error('Lỗi khi tải từ vựng');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const currentVocab = data.items[currentIndex];
+  useEffect(() => {
+    if (lessonId) {
+      fetchVocabularies();
+    }
+  }, [lessonId]);
+
+  // Close modal and reset when changing vocabulary
+  useEffect(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current.abort();
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    setIsVoiceModalOpen(false);
+    setIsListening(false);
+    setVoiceResult(null);
+  }, [currentIndex]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+        recognitionRef.current.abort();
+      }
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="lesson-vocab">
+        <div className="lesson-vocab-loading">
+          <Spin size="large" />
+        </div>
+      </div>
+    );
+  }
+
+  if (vocabularies.length === 0) {
+    return (
+      <div className="lesson-vocab">
+        <div className="lesson-vocab-empty">
+          <p>Chưa có từ vựng</p>
+        </div>
+      </div>
+    );
+  }
+
+  const currentVocab = vocabularies[currentIndex];
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
@@ -126,12 +187,141 @@ const LessonVocab = () => {
   };
 
   const handleNext = () => {
-    if (currentIndex < data.items.length - 1) {
+    if (currentIndex < vocabularies.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
   };
 
-  const handleRecordAudio = () => {};
+  const calculateScore = (
+    recognizedText: string,
+    correctText: string,
+  ): number => {
+    const normalizedRecognized = recognizedText.trim();
+    const normalizedCorrect = correctText.trim();
+
+    if (normalizedRecognized === normalizedCorrect) {
+      return 5;
+    }
+
+    // Simple similarity check for Japanese text
+    let matches = 0;
+    const minLength = Math.min(
+      normalizedRecognized.length,
+      normalizedCorrect.length,
+    );
+    for (let i = 0; i < minLength; i++) {
+      if (normalizedRecognized[i] === normalizedCorrect[i]) {
+        matches++;
+      }
+    }
+
+    const similarity =
+      matches / Math.max(normalizedRecognized.length, normalizedCorrect.length);
+
+    if (similarity >= 0.9) return 5;
+    if (similarity >= 0.8) return 4;
+    if (similarity >= 0.6) return 3;
+    if (similarity >= 0.4) return 2;
+    return 1;
+  };
+
+  const getFeedback = (score: number): string => {
+    if (score >= 5) return 'Tuyệt vời!';
+    if (score >= 4) return 'Tốt!';
+    if (score >= 3) return 'Khá tốt!';
+    if (score >= 2) return 'Cần cải thiện';
+    return 'Hãy thử lại';
+  };
+
+  const startListening = () => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      message.error('Trình duyệt của bạn không hỗ trợ nhận diện giọng nói');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'ja-JP';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const result = event.results[event.resultIndex];
+      if (result && result[0]) {
+        const transcript = result[0].transcript;
+        const score = calculateScore(transcript, currentVocab.originText);
+        const feedback = getFeedback(score);
+
+        setVoiceResult({
+          recognizedText: transcript,
+          score,
+          feedback,
+        });
+        setIsListening(false);
+      }
+    };
+
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+      if (event.error === 'no-speech') {
+        message.error('Không nghe được. Vui lòng thử lại.');
+      } else {
+        message.error('Lỗi nhận diện giọng nói');
+      }
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
+
+  const handleRecordAudio = () => {
+    if (!currentVocab) return;
+    setIsVoiceModalOpen(true);
+    setVoiceResult(null);
+    startListening();
+  };
+
+  const handlePlayAudio = () => {
+    if (!currentVocab) return;
+
+    // Use Web Speech API SpeechSynthesis for text-to-speech
+    if ('speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(currentVocab.originText);
+      utterance.lang = 'ja-JP';
+      utterance.rate = 0.8;
+      utterance.pitch = 1;
+      window.speechSynthesis.speak(utterance);
+    } else {
+      message.error('Trình duyệt của bạn không hỗ trợ phát âm');
+    }
+  };
+
+  const handleVoiceModalClose = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current.abort();
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    setIsVoiceModalOpen(false);
+    setIsListening(false);
+    setVoiceResult(null);
+  };
 
   return (
     <div className="lesson-vocab">
@@ -204,6 +394,7 @@ const LessonVocab = () => {
               </button>
               <button
                 className="audio-button speaker-button"
+                onClick={handlePlayAudio}
                 aria-label="Play audio"
               >
                 <svg
@@ -268,17 +459,25 @@ const LessonVocab = () => {
           <ArrowLeftOutlined />
         </button>
         <div className="nav-info">
-          Câu {currentIndex + 1}/{data.items.length}
+          Câu {currentIndex + 1}/{vocabularies.length}
         </div>
         <button
           className="nav-button"
           onClick={handleNext}
-          disabled={currentIndex === data.items.length - 1}
+          disabled={currentIndex === vocabularies.length - 1}
           aria-label="Next"
         >
           <ArrowRightOutlined />
         </button>
       </div>
+
+      {/* Voice Recognition Modal */}
+      <VoiceRecognitionModal
+        open={isVoiceModalOpen}
+        onClose={handleVoiceModalClose}
+        isListening={isListening}
+        voiceResult={voiceResult}
+      />
     </div>
   );
 };

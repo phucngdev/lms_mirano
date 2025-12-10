@@ -1,6 +1,5 @@
 import './Courses.scss';
 import { ArrowRight, DotIcon } from '../../../../assets/svg/externalIcon';
-import logoMankai from '/src/assets/images/logomankaisvg.svg';
 import { Carousel } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -97,19 +96,12 @@ const Courses = () => {
                       </div>
                     </div>
                     <div className="courses-card-right">
-                      <div className="courses-course-logo">
-                        <div className="courses-logo-header">
-                          <img
-                            src={logoMankai}
-                            alt="Mankai Logo"
-                            className="courses-logo-icon"
-                          />
-                        </div>
-
-                        <div className="courses-subtitle">CHILL CLASS</div>
-                        <div className="courses-badge">
-                          <span>JLPT THỰC CHIẾN</span>
-                        </div>
+                      <div className="courses-course-thumbnail">
+                        <img
+                          src={course.thumbnailUrl}
+                          alt={course.title}
+                          className="courses-thumbnail-image"
+                        />
                       </div>
                     </div>
                   </div>

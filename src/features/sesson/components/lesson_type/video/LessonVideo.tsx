@@ -1,4 +1,4 @@
-import { VideoUrlEntity } from '#/api/requests';
+import { DocumentEntityType, VideoUrlEntity } from '#/api/requests';
 import {
   PlayCircleOutlined,
   PauseCircleOutlined,
@@ -17,7 +17,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '#/src/redux/store/store';
 import { message } from 'antd';
 
-const LessonVideo = () => {
+interface LessonVideoProps {
+  setDescription: (description: string) => void;
+  setDocuments: (documents: DocumentEntityType[]) => void;
+}
+const LessonVideo = ({ setDescription, setDocuments }: LessonVideoProps) => {
   const { lessonId } = useParams();
   const { data: lessons } = useSelector((state: RootState) => state.lesson);
   const [lessonVideo, setLessonVideo] = useState<VideoUrlEntity | null>(null);
@@ -46,9 +50,11 @@ const LessonVideo = () => {
     try {
       const response = await getVideoByIdLessonService(lessonId || '', 1, 0);
       setLessonVideo(response.data.data.items[0]);
+      setDescription(response.data.data.items[0].description);
+      setDocuments(response.data.data.items[0].documents);
     } catch (error) {
       console.error(error);
-      message.error('Lỗi khi tải video');
+      // message.error('Lỗi khi tải video');
     }
   };
 

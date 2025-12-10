@@ -1,30 +1,129 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { Spin, message } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { getFlashCardByIdLessionService } from '#/api/services/flashcard.service';
+import { useAppDispatch } from '#/src/redux/store/store';
+import { updateLessonProgress } from '#/src/redux/slice/lesson.slice';
+import { updateLessonProgress as updateLessonProgressService } from '#/api/services/lesson-progress.service';
 import './LessonFlashCard.scss';
 import MatchingCard from '../../flashcard-game/matching/MatchingCard';
 import BattleCard from '../../flashcard-game/battle/BattleCard';
 import SurvivalMode from '../../flashcard-game/survival/SurvivalMode';
 
+interface FlashCardItem {
+  id: string;
+  front: string;
+  back: string;
+  lessonId: string;
+  isLearned: boolean;
+  reading: string;
+}
+
+interface FlashCardResponse {
+  statusCode: number;
+  data: {
+    items: FlashCardItem[];
+    meta: {
+      limit: number;
+      offset: number;
+      total: number;
+      totalPages: number;
+    };
+  };
+}
+
 const LessonFlashCard = () => {
+  const { lessonId } = useParams<{ lessonId: string }>();
+  const dispatch = useAppDispatch();
+  const hasUpdatedProgressRef = useRef(false);
+  const [flashCards, setFlashCards] = useState<FlashCardItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentCard, setCurrentCard] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
   const [showMatchingGame, setShowMatchingGame] = useState(false);
   const [showBattleGame, setShowBattleGame] = useState(false);
   const [showSurvivalGame, setShowSurvivalGame] = useState(false);
-  const totalCards = 21;
 
-  const mockFlashCards = [
-    { front: '私は', back: 'Watashi wa', meaning: 'Tôi', reading: 'わたしは' },
-    { front: '本', back: 'Hon', meaning: 'Sách', reading: 'ほん' },
-    { front: '猫', back: 'Neko', meaning: 'Mèo', reading: 'ねこ' },
-  ];
+  useEffect(() => {
+    if (lessonId) {
+      fetchFlashCards();
+    }
+  }, [lessonId]);
+
+  const updateProgress = async () => {
+    if (!lessonId || hasUpdatedProgressRef.current) {
+      return;
+    }
+
+    try {
+      // Call API to update progress
+      await updateLessonProgressService({
+        lessonId: lessonId,
+        progress: 100, // Completed = 100%
+      });
+
+      // Update Redux state
+      dispatch(updateLessonProgress({ lessonId, progress: 100 }));
+      hasUpdatedProgressRef.current = true;
+    } catch (error) {
+      console.error('Error updating lesson progress:', error);
+      message.error('Lỗi khi cập nhật tiến trình bài học');
+    }
+  };
+
+  // Cleanup audio when changing card or unmounting
+  useEffect(() => {
+    return () => {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [currentCard]);
+
+  // Update progress when reaching the last card
+  useEffect(() => {
+    if (
+      flashCards.length > 0 &&
+      currentCard === flashCards.length - 1 &&
+      !hasUpdatedProgressRef.current &&
+      lessonId
+    ) {
+      updateProgress();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentCard, flashCards.length, lessonId]);
+
+  const fetchFlashCards = async () => {
+    if (!lessonId) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      // Gọi API với limit lớn để lấy tất cả flashcard
+      const response = await getFlashCardByIdLessionService(lessonId, 1000, 0);
+      const apiData = response.data as FlashCardResponse;
+
+      if (apiData.statusCode === 200 && apiData.data?.items) {
+        setFlashCards(apiData.data.items);
+      }
+    } catch (error) {
+      console.error('Error fetching flash cards:', error);
+      message.error('Lỗi khi tải flashcard');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Convert flash cards to matching card format
-  const matchingCardData = mockFlashCards.map((card, index) => ({
-    id: `card-${index + 1}`,
+  const matchingCardData = flashCards.map(card => ({
+    id: card.id,
     front: card.front,
-    back: card.meaning || card.back,
+    back: card.back,
     fileErrorUrl: '',
-    lessonId: 'lesson-1',
+    lessonId: card.lessonId,
     reading: card.reading || '',
   }));
 
@@ -32,17 +131,32 @@ const LessonFlashCard = () => {
   const battleCardData = matchingCardData;
   const survivalCardData = matchingCardData;
 
-  const currentFlashCard = mockFlashCards[currentCard % mockFlashCards.length];
+  const totalCards = flashCards.length;
+  const currentFlashCard =
+    flashCards.length > 0
+      ? flashCards[currentCard % flashCards.length]
+      : { front: '', back: '', reading: '' };
 
   const handleNext = () => {
-    setCurrentCard(prev => (prev + 1) % totalCards);
+    if (totalCards > 0) {
+      const nextCard = (currentCard + 1) % totalCards;
+      setCurrentCard(nextCard);
+      setIsFlipped(false); // Reset flip when changing card
+    }
   };
 
   const handlePrev = () => {
-    setCurrentCard(prev => (prev - 1 + totalCards) % totalCards);
+    if (totalCards > 0) {
+      setCurrentCard(prev => (prev - 1 + totalCards) % totalCards);
+      setIsFlipped(false); // Reset flip when changing card
+    }
   };
 
-  const progress = ((currentCard + 1) / totalCards) * 100;
+  const handleCardClick = () => {
+    setIsFlipped(prev => !prev);
+  };
+
+  const progress = totalCards > 0 ? ((currentCard + 1) / totalCards) * 100 : 0;
 
   const handleMatchingGameClick = () => {
     setShowMatchingGame(true);
@@ -68,6 +182,49 @@ const LessonFlashCard = () => {
     setShowSurvivalGame(false);
   };
 
+  const handlePlayAudio = () => {
+    if (!currentFlashCard || !currentFlashCard.front) return;
+
+    // Use Web Speech API SpeechSynthesis for text-to-speech
+    if ('speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+
+      // Phát âm text hiện tại (front nếu chưa flip, back nếu đã flip)
+      const textToSpeak = isFlipped
+        ? currentFlashCard.back || currentFlashCard.reading
+        : currentFlashCard.front;
+
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = 'ja-JP';
+      utterance.rate = 0.8;
+      utterance.pitch = 1;
+      window.speechSynthesis.speak(utterance);
+    } else {
+      message.error('Trình duyệt của bạn không hỗ trợ phát âm');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="lesson-flashcard-container">
+        <div className="lesson-flashcard-loading">
+          <Spin size="large" />
+        </div>
+      </div>
+    );
+  }
+
+  if (flashCards.length === 0) {
+    return (
+      <div className="lesson-flashcard-container">
+        <div className="lesson-flashcard-empty">
+          <p>Chưa có flashcard</p>
+        </div>
+      </div>
+    );
+  }
+
   // Nếu đang chơi survival game, hiển thị SurvivalMode
   if (showSurvivalGame) {
     return (
@@ -92,9 +249,30 @@ const LessonFlashCard = () => {
       <div className="flashcard-section">
         <div className="flashcard-wrapper">
           <div className="flashcard-wrapper-layer">
-            <div className="flashcard-screen">
-              <div className="flashcard-content">{currentFlashCard.front}</div>
-              <div className="audio-icon">
+            <div
+              className={`flashcard-screen ${isFlipped ? 'flipped' : ''}`}
+              onClick={handleCardClick}
+            >
+              <div className="flashcard-front">
+                <div className="flashcard-content">
+                  {currentFlashCard.front}
+                </div>
+              </div>
+              <div className="flashcard-back">
+                <div className="flashcard-content">{currentFlashCard.back}</div>
+                {currentFlashCard.reading && (
+                  <div className="flashcard-reading">
+                    {currentFlashCard.reading}
+                  </div>
+                )}
+              </div>
+              <div
+                className="audio-icon"
+                onClick={e => {
+                  e.stopPropagation();
+                  handlePlayAudio();
+                }}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"

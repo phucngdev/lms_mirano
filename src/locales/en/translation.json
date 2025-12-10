@@ -45,7 +45,7 @@
     "userLocation": "Dong Anh, Ha Noi",
     "course": "Courses",
     "topic": "Japanese by Topic",
-    "mocktest": "Mock Test with Mankai",
+    "mocktest": "Mock Test with Mirano",
     "examTest": "Test",
     "loading": "Loading",
     "btnSub": "Submit",
@@ -106,7 +106,7 @@
     "point": "points"
   },
   "footer": {
-    "title": "MANKAI ACADEMY FOR PRACTICAL JAPANESE TRAINING & DEVELOPMENT",
+    "title": "Mirano ACADEMY FOR PRACTICAL JAPANESE TRAINING & DEVELOPMENT",
     "contactInfo": {
       "title": "CONTACT INFORMATION",
       "address": "Address:",
@@ -114,7 +114,7 @@
       "hotline": "Hotline:",
       "hotlineText": "0835 662 538",
       "email": "Email:",
-      "emailText": "support@mankai.edu.vn"
+      "emailText": "support@mirano.edu.vn"
     },
     "quickLinks": {
       "title": "QUICK LINKS",
@@ -126,7 +126,7 @@
         "IT Talk",
         "Tokutei",
         "Corporate Training",
-        "Mankai Hall of Fame",
+        "Mirano Hall of Fame",
         "News",
         "Contact"
       ]
@@ -136,7 +136,7 @@
       "socialMedia": ["Facebook", "Youtube"]
     },
     "copyright": {
-      "text": "Copyright 2024 By Mankai Academy - All rights reserved"
+      "text": "Copyright 2024 By Mirano Academy - All rights reserved"
     }
   },
   "coursesSlider": {
@@ -163,10 +163,10 @@
     }
   },
   "specialRanking": {
-    "title": "Learn with Mankai",
+    "title": "Learn with Mirano",
     "kaiwa": "Kaiwa AI",
     "minna": "Minna Vocabulary",
-    "testMankai": "Mock Test with Mankai",
+    "testMankai": "Mock Test with Mirano",
     "kanji": "Kanji Mnemonic",
     "button": "Explore Now",
     "listDesc": {

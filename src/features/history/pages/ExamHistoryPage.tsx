@@ -1,51 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Breadcrumb, Spin, Pagination, Card } from 'antd';
 import { CalendarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { getTestResultUserService } from '#/api/services/mockTest.service';
 import Cookies from 'js-cookie';
 import './ExamHistoryPage.scss';
-
-interface TestInfo {
-  id: string;
-  name: string;
-  description: string;
-  randomAnswer: boolean;
-  duration: number;
-  numberOfParticipants: number;
-  categoryId: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface TestResultItem {
-  id: string;
-  testId: TestInfo;
-  score: number;
-  createdAt: string;
-  details: any[]; // Complex nested structure, can be detailed later if needed
-}
-
-interface ApiMeta {
-  limit: number;
-  offset: number;
-  total: number;
-  totalPages: number;
-}
-
-interface ApiResponse {
-  statusCode: number;
-  data: {
-    items: TestResultItem[];
-    meta: ApiMeta;
-  };
-}
+import { IMeta, TestResultUserDetailEntity } from '#/api/requests';
 
 const ExamHistoryPage = () => {
-  const [testResults, setTestResults] = useState<TestResultItem[]>([]);
+  const navigate = useNavigate();
+  const [testResults, setTestResults] = useState<TestResultUserDetailEntity[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [meta, setMeta] = useState<ApiMeta | null>(null);
+  const [meta, setMeta] = useState<IMeta | null>(null);
   const pageSize = 10;
 
   const user = Cookies.get('user')
@@ -69,7 +38,7 @@ const ExamHistoryPage = () => {
       setLoading(true);
       const offset = (currentPage - 1) * pageSize;
       const response = await getTestResultUserService(userId, pageSize, offset);
-      const apiData: ApiResponse = response.data;
+      const apiData = response.data;
 
       if (apiData.statusCode === 200 && apiData.data) {
         setTestResults(apiData.data.items);
@@ -146,8 +115,9 @@ const ExamHistoryPage = () => {
                   className="exam-history-card"
                   hoverable
                   onClick={() => {
-                    // Navigate to detail page if needed
-                    // navigate(`/exam-history/${result.id}`);
+                    navigate(`/exam-history/${result.id}`, {
+                      state: { testResult: result },
+                    });
                   }}
                 >
                   <div className="exam-history-card-content">
@@ -195,7 +165,7 @@ const ExamHistoryPage = () => {
             </div>
 
             {/* Pagination */}
-            {meta && meta.totalPages > 1 && (
+            {meta && meta.totalPages && meta.totalPages > 1 && (
               <div className="exam-history-pagination">
                 <Pagination
                   current={currentPage}

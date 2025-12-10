@@ -131,7 +131,7 @@
     "point": "点"
   },
   "footer": {
-    "title": "MANKAI日本語実践学院",
+    "title": "Mirano日本語実践学院",
     "contactInfo": {
       "title": "お問い合わせ",
       "address": "住所：",
@@ -139,7 +139,7 @@
       "hotline": "ホットライン：",
       "hotlineText": "0835 662 538",
       "email": "メール：",
-      "emailText": "support@mankai.edu.vn"
+      "emailText": "support@mirano.edu.vn"
     },
     "quickLinks": {
       "title": "クイックリンク",
@@ -161,7 +161,7 @@
       "socialMedia": ["Facebook", "YouTube"]
     },
     "copyright": {
-      "text": "Copyright 2024 Mankai Academy - 無断転載を禁ず"
+      "text": "Copyright 2024 Mirano Academy - 無断転載を禁ず"
     }
   },
   "coursesSlider": {

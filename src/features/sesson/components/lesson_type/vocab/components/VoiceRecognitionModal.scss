@@ -1,0 +1,71 @@
+:global(.lesson-vocab-voice-modal) {
+  .ant-modal-content {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .ant-modal-body {
+    padding: 0;
+  }
+}
+
+.lesson-vocab-voice-content {
+  padding: 24px;
+
+  .lesson-vocab-voice-listening {
+    background: #fff5f2;
+    border: 1px solid #ffd4c4;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    color: #f37142;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .lesson-vocab-voice-result {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+
+    .lesson-vocab-voice-result-label {
+      color: #16a34a;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .lesson-vocab-voice-result-word {
+      color: #1d2939;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      font-family: 'FSPFBeauSansPro', sans-serif;
+    }
+
+    .lesson-vocab-voice-result-stars {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 12px;
+
+      .lesson-vocab-star {
+        font-size: 32px;
+        color: #d1d5db;
+
+        &.filled {
+          color: #fbbf24;
+        }
+      }
+    }
+
+    .lesson-vocab-voice-result-feedback {
+      color: #f37142;
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+}
+

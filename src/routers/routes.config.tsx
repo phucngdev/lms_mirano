@@ -1,6 +1,7 @@
 import { NotFound } from '#/shared/components/notfound/NotFound';
 import Login from '#/features/authentication/pages/Login';
 import Register from '#/features/authentication/pages/Register';
+import VerifyOtp from '#/features/authentication/pages/VerifyOtp';
 import PublicLayout from './PublicRouter';
 import Home from '#/features/home/pages/Home';
 import CourseDetail from '#/features/course/pages/CourseDetail';
@@ -15,6 +16,7 @@ import TopicsPage from '#/features/topics/pages/TopicsPage';
 import TopicVocabPage from '#/features/topics/pages/TopicVocabPage';
 import ProfilePage from '#/features/profile/pages/ProfilePage';
 import ExamHistoryPage from '#/features/history/pages/ExamHistoryPage';
+import ExamResultDetailPage from '#/features/history/pages/ExamResultDetailPage';
 
 const routesConfig = [
   {
@@ -27,6 +29,10 @@ const routesConfig = [
       {
         element: <Register />,
         path: 'register',
+      },
+      {
+        element: <VerifyOtp />,
+        path: 'verify-otp',
       },
     ],
   },
@@ -77,6 +83,10 @@ const routesConfig = [
       {
         element: <ExamHistoryPage />,
         path: '/exam-history',
+      },
+      {
+        element: <ExamResultDetailPage />,
+        path: '/exam-history/:id',
       },
     ],
   },

@@ -5,6 +5,7 @@ import {
   ReloadOutlined,
 } from '@ant-design/icons';
 import './LessonKanji.scss';
+import KanjiSVG from '#/shared/components/KanjiSVG/KanjiSVG';
 
 const LessonKanji = () => {
   const data = {
@@ -324,7 +325,8 @@ const LessonKanji = () => {
       <div className="lesson-kanji-container">
         <div className="lesson-kanji-display">
           <div className="kanji-character">
-            {responseData?.svg ? (
+            <KanjiSVG character={currentKanji.character} />
+            {/* {responseData?.svg ? (
               <div
                 dangerouslySetInnerHTML={{ __html: responseData.svg }}
                 style={{
@@ -336,7 +338,7 @@ const LessonKanji = () => {
               />
             ) : (
               <p>Không có dữ liệu SVG cho {currentKanji.character}</p>
-            )}
+            )} */}
           </div>
         </div>
 

@@ -17,7 +17,9 @@
     .image-section {
       position: relative;
       z-index: 1;
-      margin-top: 40px;
+      border-radius: 20px;
+      overflow: hidden;
+      // margin-top: 40px;
 
       img {
         width: 100%;

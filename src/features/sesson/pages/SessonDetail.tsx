@@ -41,7 +41,9 @@ const SessonDetail = () => {
       <div className="sesson-detail-header">
         <ArrowLeftOutlined
           className="back-button"
-          onClick={() => navigate(`/course/${courseId}`)}
+          onClick={() =>
+            courseId ? navigate(`/course/${courseId}`) : navigate(-1)
+          }
         />
         <span className="sesson-title">{sessonName}</span>
         <div className="header-actions">

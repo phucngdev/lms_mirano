@@ -24,7 +24,7 @@
     "forgotPassword": "Quên mật khẩu?",
     "createAccount": "Tạo tài khoản",
     "rememberLogin": "Lưu thông tin đăng nhập",
-    "welcome": "Chào mừng đến với Mankai Academy"
+    "welcome": "Chào mừng đến với Mirano Academy"
   },
   "register": {
     "title": "Tạo tài khoản",
@@ -71,7 +71,7 @@
     "userLocation": "Đông Anh, Hà Nội",
     "course": "Các khóa học",
     "topic": "Tiếng Nhật theo chủ đề",
-    "mocktest": "Thi thử cùng Mankai",
+    "mocktest": "Thi thử cùng Mirano",
     "examTest": "Đề thi",
     "loading": "Đang tải",
     "btnSub": "Nộp bài",
@@ -151,7 +151,7 @@
       "hotline": "Hotline:",
       "hotlineText": "0835 662 538",
       "email": "Email:",
-      "emailText": "support@mankai.edu.vn"
+      "emailText": "support@mirano.edu.vn"
     },
     "quickLinks": {
       "title": "LIÊN KẾT NHANH",
@@ -163,7 +163,7 @@
         "IT Talk",
         "Tokutei",
         "Đào tạo Doanh ngiệp",
-        "Bảng vàng Mankai",
+        "Bảng vàng Mirano",
         "Tin tức",
         "Liên hệ"
       ]
@@ -173,7 +173,7 @@
       "socialMedia": ["Facebook", "Youtube"]
     },
     "copyright": {
-      "text": "Copyright 2024 By Mankai Academy - All rights reserved"
+      "text": "Copyright 2024 By Mirano Academy - All rights reserved"
     }
   },
   "coursesSlider": {
@@ -200,10 +200,10 @@
     }
   },
   "specialRanking": {
-    "title": "Học cùng Mankai",
+    "title": "Học cùng Mirano",
     "kaiwa": "Kaiwa AI",
     "minna": "Học từ vựng Minna",
-    "testMankai": "Thi thử cùng Mankai",
+    "testMankai": "Thi thử cùng Mirano",
     "kanji": "Kanji Mnemonic",
     "button": "Khám phá ngay",
     "listDesc": {

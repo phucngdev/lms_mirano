@@ -1,0 +1,199 @@
+.lesson-grammar {
+  width: 100%;
+  padding: 24px 0;
+
+  .lesson-grammar-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 20px;
+  }
+
+  .lesson-grammar-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: #8e9193;
+    font-size: 16px;
+  }
+
+  .lesson-grammar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    @media (max-width: 768px) {
+      gap: 16px;
+    }
+
+    .lesson-grammar-card {
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+
+      &:hover {
+        // box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      :global(.ant-card-head) {
+        background: #fafafa;
+        border-bottom: 1px solid #e5e7eb;
+        border-radius: 12px 12px 0 0;
+
+        :global(.ant-card-head-title) {
+          padding: 16px 24px;
+        }
+      }
+
+      :global(.ant-card-body) {
+        padding: 24px;
+
+        @media (max-width: 768px) {
+          padding: 20px;
+        }
+      }
+
+      .lesson-grammar-card-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1d2939;
+        font-family: 'FSPFBeauSansPro', sans-serif;
+
+        @media (max-width: 768px) {
+          font-size: 16px;
+        }
+      }
+
+      .lesson-grammar-content {
+        font-size: 16px;
+        line-height: 1.8;
+        color: #1d2939;
+
+        :global(p) {
+          margin-bottom: 16px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+        :global(h1),
+        :global(h2),
+        :global(h3),
+        :global(h4),
+        :global(h5),
+        :global(h6) {
+          margin-top: 24px;
+          margin-bottom: 16px;
+          font-weight: 700;
+          color: #1d2939;
+          font-family: 'FSPFBeauSansPro', sans-serif;
+
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+
+        :global(h1) {
+          font-size: 28px;
+        }
+
+        :global(h2) {
+          font-size: 24px;
+        }
+
+        :global(h3) {
+          font-size: 20px;
+        }
+
+        :global(img) {
+          max-width: 100%;
+          height: auto;
+          border-radius: 8px;
+          margin: 16px 0;
+        }
+
+        :global(ul),
+        :global(ol) {
+          margin: 16px 0;
+          padding-left: 32px;
+
+          :global(li) {
+            margin-bottom: 8px;
+            line-height: 1.8;
+          }
+        }
+
+        :global(blockquote) {
+          margin: 16px 0;
+          padding: 16px 20px;
+          background: #f0f7ff;
+          border-left: 4px solid #1890ff;
+          border-radius: 4px;
+          font-style: italic;
+        }
+
+        :global(table) {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 16px 0;
+
+          :global(th),
+          :global(td) {
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+          }
+
+          :global(th) {
+            background: #fafafa;
+            font-weight: 600;
+          }
+        }
+
+        :global(code) {
+          background: #f5f5f5;
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-family: 'Courier New', monospace;
+          font-size: 14px;
+        }
+
+        :global(pre) {
+          background: #f5f5f5;
+          padding: 16px;
+          border-radius: 8px;
+          overflow-x: auto;
+          margin: 16px 0;
+
+          :global(code) {
+            background: none;
+            padding: 0;
+          }
+        }
+
+        :global(strong),
+        :global(b) {
+          font-weight: 700;
+          color: #1d2939;
+        }
+
+        :global(em),
+        :global(i) {
+          font-style: italic;
+        }
+
+        :global(a) {
+          color: #f37142;
+          text-decoration: none;
+          transition: color 0.3s ease;
+
+          &:hover {
+            color: #d85c2f;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}

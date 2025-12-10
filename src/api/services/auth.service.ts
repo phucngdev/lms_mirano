@@ -6,15 +6,15 @@ import type {
   LoginGoogleDto,
   LoginInputDto,
   RefreshTokenInputDto,
+  RegisterInputDto,
   ResetPasswordInputDto,
 } from '../requests';
-
 
 export const loginService = async (data: LoginInputDto) =>
   await jsonAxios.post(`auth/login`, data);
 
-// export const registerService = async (data: RegisterDto) =>
-//   await jsonAxios.post(`auth/register`, data);
+export const registerService = async (data: RegisterInputDto) =>
+  await jsonAxios.post(`auth/register`, data);
 
 export const confirmRegisterService = async (data: ConfirmRegisterDto) =>
   await jsonAxios.post(`auth/confirm-register`, data);
@@ -37,11 +37,9 @@ export const loginAppleService = async (data: LoginAppleDto) =>
 export const renewOtpService = async (data: LoginAppleDto) =>
   await jsonAxios.post(`auth/renew-otp`, data);
 
-
 export const logoutService = async () => await jsonAxios.post(`auth/logout`);
 
 export const refreshToken = async (ref: string) =>
   await jsonAxios.post(`auth/refresh-token`, {
     refreshToken: ref,
   });
-

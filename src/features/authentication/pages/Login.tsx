@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import './Login.scss';
 import { loginService } from '#/api/services/auth.service';
 import Cookies from 'js-cookie';
+import frame_auth from '#/assets/images/login/frame_auth.png';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -38,10 +39,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-left">
         <div className="image-section">
-          <img
-            src="/src/assets/images/login/Frame 1000007260.png"
-            alt="Students learning"
-          />
+          <img src={frame_auth} alt="Students learning" />
         </div>
       </div>
 

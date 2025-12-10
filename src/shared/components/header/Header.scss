@@ -70,6 +70,29 @@
     align-items: center;
     gap: 24px;
 
+    .header-right__button {
+      background-color: #f37142;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      padding: 10px 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(243, 113, 66, 0.3);
+      border: 1px solid var(--Orange-600, #dd673c);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(243, 113, 66, 0.4);
+        background: linear-gradient(135deg, #ff7c4e 0%, #f37142 100%);
+      }
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+
     .header-right__user {
       display: flex;
       align-items: center;

@@ -64,9 +64,7 @@ const TopicsPage = () => {
     {
       title: <Link to="/">Trang chủ</Link>,
     },
-    {
-      title: <Link to="/">Khóa học Online</Link>,
-    },
+
     {
       title: 'Tiếng Nhật theo chủ đề',
     },

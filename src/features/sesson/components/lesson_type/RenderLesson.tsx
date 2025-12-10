@@ -8,15 +8,28 @@ import LessonText from './text/LessonText';
 import LessonFlashCard from './flashcard/LessonFlashCard';
 import LessonQuiz from './quiz/LessonQuiz';
 import LessonSlide from './slide/LessonSlide';
+import LessonReading from './reading/LessonReading';
+import { DocumentEntityType } from '#/api/requests';
 
 interface RenderLessonProps {
   lesson: LessonStudentEntity | null;
+  setDescription: (description: string) => void;
+  setDocuments: (documents: DocumentEntityType[]) => void;
 }
 
-const RenderLesson = ({ lesson }: RenderLessonProps) => {
+const RenderLesson = ({
+  lesson,
+  setDescription,
+  setDocuments,
+}: RenderLessonProps) => {
   switch (lesson?.type) {
     case 'VIDEO':
-      return <LessonVideo />;
+      return (
+        <LessonVideo
+          setDescription={setDescription}
+          setDocuments={setDocuments}
+        />
+      );
     case 'GRAMMAR':
       return <LessonGrammar />;
     case 'KANJI':
@@ -24,7 +37,12 @@ const RenderLesson = ({ lesson }: RenderLessonProps) => {
     case 'VOCAB':
       return <LessonVocab />;
     case 'TEXT':
-      return <LessonText />;
+      return (
+        <LessonText
+          setDescription={setDescription}
+          setDocuments={setDocuments}
+        />
+      );
     case 'FLASH_CARD':
       return <LessonFlashCard />;
     case 'FILE':
@@ -33,6 +51,13 @@ const RenderLesson = ({ lesson }: RenderLessonProps) => {
       return <LessonSlide />;
     case 'QUIZ':
       return <LessonQuiz lesson={lesson} />;
+    case 'READING':
+      return <LessonReading />;
+    case 'LISTENING':
+      return <LessonReading />;
+    case 'PRACTICE_THROUGH':
+      return <LessonReading />;
+
     default:
       return <DefaultLesson lesson={lesson} />;
   }

@@ -52,10 +52,38 @@
   padding: 4rem 2rem;
   position: relative;
   min-height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  cursor: pointer;
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+
+  &.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-front,
+  .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    top: 0;
+    left: 0;
+  }
+
+  .flashcard-front {
+    transform: rotateY(0deg);
+  }
+
+  .flashcard-back {
+    transform: rotateY(180deg);
+  }
 }
 
 .flashcard-content {
@@ -63,6 +91,25 @@
   font-weight: bold;
   color: #333;
   text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.flashcard-reading {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  color: #666;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .audio-icon {
@@ -338,5 +385,28 @@
   .section-title {
     font-size: 1rem;
     padding: 0.4rem 1.5rem;
+  }
+}
+
+// Loading and empty states
+.lesson-flashcard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 40px;
+}
+
+.lesson-flashcard-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 40px;
+
+  p {
+    font-size: 16px;
+    color: #676767;
+    text-align: center;
   }
 }

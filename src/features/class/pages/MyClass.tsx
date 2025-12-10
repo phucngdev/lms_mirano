@@ -12,6 +12,7 @@ import {
 } from '#/api/services/class.service';
 import { getSessonSchedulesService } from '#/api/services/sessonschedules.service';
 import './MyClass.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface ClassItem {
   id: string;
@@ -101,6 +102,7 @@ interface ApiClassDetailResponse {
 }
 
 const MyClass = () => {
+  const navigate = useNavigate();
   const [classes, setClasses] = useState<ClassItem[]>([]);
   const [loadingClasses, setLoadingClasses] = useState(true);
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
@@ -451,7 +453,23 @@ const MyClass = () => {
                             </div>
                             <div className="lessons-list">
                               {session.lessons.map(lesson => (
-                                <div key={lesson.id} className="lesson-item">
+                                <div
+                                  onClick={() => {
+                                    sessionStorage.setItem(
+                                      'classId',
+                                      selectedClassId || '',
+                                    );
+                                    sessionStorage.setItem(
+                                      'courseId',
+                                      selectedCourseId || '',
+                                    );
+                                    navigate(
+                                      `/sesson/${session.id}/lesson/${lesson.id}`,
+                                    );
+                                  }}
+                                  key={lesson.id}
+                                  className="lesson-item"
+                                >
                                   <span className="lesson-title">
                                     {lesson.title}
                                   </span>

@@ -8,6 +8,14 @@ import {
   ExamLessonWithMappingEntity,
   LessonStudentEntity,
   SortingAnswerDto,
+  UpsertExamResultStudentDto,
+  MultipleChoiceUserAnswerDto,
+  MultipleChoiceHorizontalUserAnswerDto,
+  InBlankUserAnswerDto,
+  MatchingUserAnswerDto,
+  SortingUserAnswerDto,
+  InBlankAnswerDto,
+  MatchingAnswerDto,
 } from '#/api/requests';
 import { QuestionEntity } from '#/api/requests/models/QuestionEntity';
 import { QuestionGroupEntity } from '#/api/requests/models/QuestionGroupEntity';
@@ -22,6 +30,15 @@ import { message, Spin, type UploadFile } from 'antd';
 import './LessonQuiz.scss';
 import { getExamLessionByLessonIdService } from '#/api/services/examLesson.service';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '#/src/redux/store/store';
+import { updateLessonProgress } from '#/src/redux/slice/lesson.slice';
+import { updateLessonProgress as updateLessonProgressService } from '#/api/services/lesson-progress.service';
+import {
+  getExamResultHistoryService,
+  postExamResultService,
+} from '#/api/services/examResult.service';
+import Cookies from 'js-cookie';
+import { CalendarOutlined } from '@ant-design/icons';
 
 interface LessonQuizProps {
   lesson?: LessonStudentEntity;
@@ -46,13 +63,30 @@ const LessonQuiz: React.FC<LessonQuizProps> = ({
   examWithMapping,
 }) => {
   const { lessonId } = useParams();
+  const dispatch = useAppDispatch();
+  const hasUpdatedProgressRef = useRef(false);
   const [loading, setLoading] = useState(false);
   const [exam, setExam] = useState<ExamLessonWithMappingEntity | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerState>>({});
   const [showResults, setShowResults] = useState(false);
+  const [examHistory, setExamHistory] = useState<
+    Array<{
+      id: string;
+      examName: string;
+      point: number;
+      completionTime: string;
+    }>
+  >([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const questionRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const shouldScrollRef = useRef(false);
+
+  // Get userId from cookies
+  const user = Cookies.get('user')
+    ? JSON.parse(Cookies.get('user') as string)
+    : null;
+  const userId = user?.id || '';
 
   const fetchExam = async () => {
     try {
@@ -70,7 +104,7 @@ const LessonQuiz: React.FC<LessonQuizProps> = ({
       setAnswers({});
     } catch (error) {
       console.error(error);
-      message.error('Lỗi khi tải bài học');
+      // message.error('Lỗi khi tải bài học');
     } finally {
       setLoading(false);
     }
@@ -79,6 +113,45 @@ const LessonQuiz: React.FC<LessonQuizProps> = ({
   useEffect(() => {
     fetchExam();
   }, [lessonId]);
+
+  // Fetch exam history when exam is loaded
+  useEffect(() => {
+    if (exam?.exam?.id && userId) {
+      fetchExamHistory();
+    }
+  }, [exam?.exam?.id, userId]);
+
+  const fetchExamHistory = async () => {
+    if (!exam?.exam?.id || !userId) {
+      return;
+    }
+
+    try {
+      setLoadingHistory(true);
+      const response = await getExamResultHistoryService(exam.exam.id, userId);
+      const apiData = response.data;
+
+      if (apiData.statusCode === 200 && apiData.data) {
+        setExamHistory(apiData.data);
+      }
+    } catch (error) {
+      console.error('Error fetching exam history:', error);
+      // Don't show error message to avoid interrupting user experience
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   // Initialize answers state - only when questions change
   const questionIds = useMemo(
@@ -685,7 +758,385 @@ const LessonQuiz: React.FC<LessonQuizProps> = ({
     setCurrentQuestionIndex(index);
   };
 
-  const handleSubmit = () => {
+  // Convert answers to userAnswers format for API
+  const convertAnswersToUserAnswers =
+    (): UpsertExamResultStudentDto['userAnswers'] => {
+      const userAnswers: UpsertExamResultStudentDto['userAnswers'] = [];
+
+      Object.keys(answers).forEach(questionId => {
+        const answer = answers[questionId];
+        const question = findQuestionById(questionId);
+        if (!question) return;
+
+        // Multiple Choice Horizontal
+        if (
+          'type' in question &&
+          question.type === QuestionEntity.type.MULTIPLE_CHOICE_HORIZONTAL &&
+          answer.selectedOptionIndex !== null
+        ) {
+          const selectedOption =
+            question.multipleChoiceHorizontal?.[answer.selectedOptionIndex];
+          if (selectedOption) {
+            const userAnswer: MultipleChoiceHorizontalUserAnswerDto = {
+              questionId: questionId,
+              questionType:
+                MultipleChoiceHorizontalUserAnswerDto.questionType
+                  .MULTIPLE_CHOICE_HORIZONTAL,
+              answer: [
+                {
+                  isCorrect: selectedOption.isCorrect || false,
+                  content: selectedOption.content || '',
+                },
+              ],
+            };
+            userAnswers.push(userAnswer);
+          }
+        }
+        // Multiple Choice
+        else if (
+          'type' in question &&
+          question.type === QuestionEntity.type.MULTIPLE_CHOICE &&
+          answer.selectedOptionIndex !== null
+        ) {
+          const selectedOption =
+            question.multipleChoiceAnswers?.[answer.selectedOptionIndex];
+          if (selectedOption) {
+            const userAnswer: MultipleChoiceUserAnswerDto = {
+              questionId: questionId,
+              questionType:
+                MultipleChoiceUserAnswerDto.questionType.MULTIPLE_CHOICE,
+              answer: [
+                {
+                  isCorrect: selectedOption.isCorrect || false,
+                  content: selectedOption.content || '',
+                },
+              ],
+            };
+            userAnswers.push(userAnswer);
+          }
+        }
+        // Fill in Blank
+        else if (
+          'type' in question &&
+          question.type === QuestionEntity.type.FILL_IN_BLANK
+        ) {
+          const fillInBlankAnswers: InBlankAnswerDto[] = [];
+          question.fillInBlank?.forEach(blank => {
+            const userAnswer = answer.fillInBlankAnswers[blank.index];
+            if (userAnswer !== undefined) {
+              fillInBlankAnswers.push({
+                index: blank.index,
+                correctAnswer: userAnswer,
+                explanation: null,
+              });
+            }
+          });
+          if (fillInBlankAnswers.length > 0) {
+            const userAnswer: InBlankUserAnswerDto = {
+              questionId: questionId,
+              questionType: InBlankUserAnswerDto.questionType.FILL_IN_BLANK,
+              answer: fillInBlankAnswers,
+            };
+            userAnswers.push(userAnswer);
+          }
+        }
+        // Choose Answer in Blank
+        else if (
+          'type' in question &&
+          question.type === QuestionEntity.type.CHOOSE_ANSWER_IN_BLANK
+        ) {
+          const chooseAnswerInBlankAnswers: InBlankAnswerDto[] = [];
+          question.chooseAnswerInBlank?.forEach(blank => {
+            const userAnswer = answer.fillInBlankAnswers[blank.index];
+            if (userAnswer !== undefined) {
+              chooseAnswerInBlankAnswers.push({
+                index: blank.index,
+                correctAnswer: userAnswer,
+                explanation: null,
+              });
+            }
+          });
+          if (chooseAnswerInBlankAnswers.length > 0) {
+            const userAnswer: InBlankUserAnswerDto = {
+              questionId: questionId,
+              questionType:
+                InBlankUserAnswerDto.questionType.CHOOSE_ANSWER_IN_BLANK,
+              answer: chooseAnswerInBlankAnswers,
+            };
+            userAnswers.push(userAnswer);
+          }
+        }
+        // Matching
+        else if (
+          'type' in question &&
+          question.type === QuestionEntity.type.MATCHING
+        ) {
+          const matchingAnswers: MatchingAnswerDto[] = [];
+          const matchingAnswersData = question.matchingAnswers || [];
+
+          // Get left options (unique)
+          const leftOptionsSet = new Set<string>();
+          matchingAnswersData.forEach(match => {
+            if (match.left) leftOptionsSet.add(match.left);
+          });
+          const leftOptionsArray = Array.from(leftOptionsSet);
+
+          // Get right options (unique)
+          const rightOptionsSet = new Set<string>();
+          matchingAnswersData.forEach(match => {
+            if (match.right) rightOptionsSet.add(match.right);
+          });
+          const rightOptionsArray = Array.from(rightOptionsSet);
+
+          // Shuffle with seed (same as in checkAnswer)
+          const seed = questionId
+            .split('')
+            .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+          const leftOptions = seededShuffle(leftOptionsArray, seed);
+          const rightOptions = seededShuffle(rightOptionsArray, seed + 1);
+
+          Object.keys(answer.matchingAnswers).forEach(leftKey => {
+            const leftIndex = parseInt(leftKey);
+            const rightIndex = parseInt(answer.matchingAnswers[leftKey]);
+            const leftValue = leftOptions[leftIndex];
+            const rightValue = rightOptions[rightIndex];
+            if (leftValue && rightValue) {
+              matchingAnswers.push({
+                left: leftValue,
+                right: rightValue,
+              });
+            }
+          });
+
+          if (matchingAnswers.length > 0) {
+            const userAnswer: MatchingUserAnswerDto = {
+              questionId: questionId,
+              questionType: MatchingUserAnswerDto.questionType.MATCHING,
+              answer: matchingAnswers,
+            };
+            userAnswers.push(userAnswer);
+          }
+        }
+        // Sorting
+        else if (
+          'type' in question &&
+          question.type === QuestionEntity.type.SORTING
+        ) {
+          const sortingAnswers: SortingAnswerDto[] = [];
+          Object.keys(answer.sortingAnswers).forEach(positionKey => {
+            const position = parseInt(positionKey);
+            const content = answer.sortingAnswers[position];
+            if (content) {
+              sortingAnswers.push({
+                index: position - 1, // Convert 1-based to 0-based
+                content: content,
+              });
+            }
+          });
+          if (sortingAnswers.length > 0) {
+            const userAnswer: SortingUserAnswerDto = {
+              questionId: questionId,
+              questionType: SortingUserAnswerDto.questionType.SORTING,
+              answer: sortingAnswers,
+            };
+            userAnswers.push(userAnswer);
+          }
+        }
+      });
+
+      return userAnswers;
+    };
+
+  // Calculate correct count directly from answers without relying on state
+  const calculateCorrectCountDirectly = (): number => {
+    let correctCount = 0;
+
+    Object.keys(answers).forEach(questionId => {
+      const answer = answers[questionId];
+      const question = findQuestionById(questionId);
+      if (!question) return;
+
+      let isCorrect = false;
+
+      // Multiple Choice Horizontal
+      if (
+        'type' in question &&
+        question.type === QuestionEntity.type.MULTIPLE_CHOICE_HORIZONTAL &&
+        answer.selectedOptionIndex !== null
+      ) {
+        const selectedOption =
+          question.multipleChoiceHorizontal?.[answer.selectedOptionIndex];
+        isCorrect = selectedOption?.isCorrect || false;
+      }
+      // Multiple Choice
+      else if (
+        'type' in question &&
+        question.type === QuestionEntity.type.MULTIPLE_CHOICE &&
+        answer.selectedOptionIndex !== null
+      ) {
+        const selectedOption =
+          question.multipleChoiceAnswers?.[answer.selectedOptionIndex];
+        isCorrect = selectedOption?.isCorrect || false;
+      }
+      // Fill in Blank
+      else if (
+        'type' in question &&
+        question.type === QuestionEntity.type.FILL_IN_BLANK
+      ) {
+        const fillInBlankAnswers = question.fillInBlank || [];
+        let allCorrect = true;
+        fillInBlankAnswers.forEach(blankAnswer => {
+          const userAnswer = answer.fillInBlankAnswers[blankAnswer.index]
+            ?.trim()
+            .toLowerCase();
+          const correctAnswer = blankAnswer.correctAnswer?.trim().toLowerCase();
+          if (userAnswer !== correctAnswer) {
+            allCorrect = false;
+          }
+        });
+        isCorrect = allCorrect && fillInBlankAnswers.length > 0;
+      }
+      // Choose Answer in Blank
+      else if (
+        'type' in question &&
+        question.type === QuestionEntity.type.CHOOSE_ANSWER_IN_BLANK
+      ) {
+        const chooseAnswerInBlank = question.chooseAnswerInBlank || [];
+        let allCorrect = true;
+        chooseAnswerInBlank.forEach(blankAnswer => {
+          const userAnswer = answer.fillInBlankAnswers[blankAnswer.index]
+            ?.trim()
+            .toLowerCase();
+          const correctAnswer = blankAnswer.correctAnswer?.trim().toLowerCase();
+          if (userAnswer !== correctAnswer) {
+            allCorrect = false;
+          }
+        });
+        isCorrect = allCorrect && chooseAnswerInBlank.length > 0;
+      }
+      // Matching
+      else if (
+        'type' in question &&
+        question.type === QuestionEntity.type.MATCHING
+      ) {
+        const matchingAnswers = question.matchingAnswers || [];
+        const leftOptionsSet = new Set<string>();
+        matchingAnswers.forEach(match => {
+          if (match.left) leftOptionsSet.add(match.left);
+        });
+        const leftOptionsArray = Array.from(leftOptionsSet);
+
+        const rightOptionsSet = new Set<string>();
+        matchingAnswers.forEach(match => {
+          if (match.right) rightOptionsSet.add(match.right);
+        });
+        const rightOptionsArray = Array.from(rightOptionsSet);
+
+        const seed = questionId
+          .split('')
+          .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const leftOptions = seededShuffle(leftOptionsArray, seed);
+        const rightOptions = seededShuffle(rightOptionsArray, seed + 1);
+
+        let allCorrect = true;
+        let hasMatches = false;
+
+        if (Object.keys(answer.matchingAnswers).length === 0) {
+          isCorrect = false;
+        } else {
+          Object.keys(answer.matchingAnswers).forEach(leftKey => {
+            const leftIndex = parseInt(leftKey);
+            const userRightIndex = parseInt(answer.matchingAnswers[leftKey]);
+            const leftValue = leftOptions[leftIndex];
+            if (!leftValue) {
+              allCorrect = false;
+              return;
+            }
+
+            const correctMatch = matchingAnswers.find(
+              match => match.left === leftValue,
+            );
+
+            if (correctMatch) {
+              hasMatches = true;
+              const correctRightIndex = rightOptions.findIndex(
+                opt => opt === correctMatch.right,
+              );
+              if (userRightIndex !== correctRightIndex) {
+                allCorrect = false;
+              }
+            } else {
+              allCorrect = false;
+            }
+          });
+
+          matchingAnswers.forEach(correctMatch => {
+            const leftIndex = leftOptions.findIndex(
+              opt => opt === correctMatch.left,
+            );
+            const rightIndex = rightOptions.findIndex(
+              opt => opt === correctMatch.right,
+            );
+
+            if (leftIndex !== -1 && rightIndex !== -1) {
+              const userMatch = answer.matchingAnswers[leftIndex.toString()];
+              if (userMatch !== rightIndex.toString()) {
+                allCorrect = false;
+              }
+            }
+          });
+
+          isCorrect = hasMatches ? allCorrect : false;
+        }
+      }
+      // Sorting
+      else if (
+        'type' in question &&
+        question.type === QuestionEntity.type.SORTING
+      ) {
+        const sortingAnswers = question.sortingAnswers || [];
+        let allCorrect = true;
+        let hasAnswers = false;
+
+        if (Object.keys(answer.sortingAnswers).length === 0) {
+          isCorrect = false;
+        } else {
+          sortingAnswers.forEach((correctAnswer: SortingAnswerDto) => {
+            const correctIndex = correctAnswer.index;
+            const position = correctIndex + 1;
+            const userAnswer = answer.sortingAnswers[position];
+            const correctContent = correctAnswer.content?.trim().toLowerCase();
+
+            if (userAnswer) {
+              hasAnswers = true;
+              const userContent = userAnswer.trim().toLowerCase();
+              if (userContent !== correctContent) {
+                allCorrect = false;
+              }
+            } else {
+              allCorrect = false;
+            }
+          });
+
+          if (
+            Object.keys(answer.sortingAnswers).length !== sortingAnswers.length
+          ) {
+            allCorrect = false;
+          }
+
+          isCorrect = hasAnswers ? allCorrect : false;
+        }
+      }
+
+      if (isCorrect) {
+        correctCount++;
+      }
+    });
+
+    return correctCount;
+  };
+
+  const handleSubmit = async () => {
     // Check all answers
     Object.keys(answers).forEach(questionId => {
       const answer = answers[questionId];
@@ -729,6 +1180,58 @@ const LessonQuiz: React.FC<LessonQuizProps> = ({
       }
     });
     setShowResults(true);
+
+    // Calculate point (percentage of correct answers) - use direct calculation
+    const correctCount = calculateCorrectCountDirectly();
+    const point =
+      totalQuestions > 0
+        ? Math.round((correctCount / totalQuestions) * 100)
+        : 0;
+
+    // Get courseId and classId from sessionStorage
+    const courseId = sessionStorage.getItem('courseId') || '';
+    const classId = sessionStorage.getItem('classId') || '';
+
+    // Save exam result
+    if (exam?.exam?.id && courseId && classId) {
+      try {
+        const userAnswers = convertAnswersToUserAnswers();
+        const examResultData: UpsertExamResultStudentDto = {
+          examId: exam.exam.id,
+          courseId: courseId,
+          classId: classId,
+          point: point,
+          userAnswers: userAnswers,
+        };
+        console.log('🚀 ~ handleSubmit ~ examResultData:', examResultData);
+
+        await postExamResultService(examResultData);
+        // Refresh history after saving
+        await fetchExamHistory();
+      } catch (error) {
+        console.error('Error saving exam result:', error);
+        // Don't show error message to avoid interrupting user experience
+      }
+    }
+
+    // Update progress when submitting quiz
+    if (lessonId && !hasUpdatedProgressRef.current) {
+      try {
+        // Call API to update progress
+        await updateLessonProgressService({
+          lessonId: lessonId,
+          progress: 100, // Completed = 100%
+        });
+        await fetchExamHistory();
+
+        // Update Redux state
+        dispatch(updateLessonProgress({ lessonId, progress: 100 }));
+        hasUpdatedProgressRef.current = true;
+      } catch (error) {
+        console.error('Error updating lesson progress:', error);
+        message.error('Lỗi khi cập nhật tiến trình bài học');
+      }
+    }
   };
 
   const getCorrectCount = () => {
@@ -1208,6 +1711,42 @@ const LessonQuiz: React.FC<LessonQuizProps> = ({
                 Nộp bài
                 <ArrowRightOutlined className="lesson-quiz-submit-icon" />
               </button>
+
+              {/* Exam History Section */}
+              <div className="lesson-quiz-history">
+                <div className="lesson-quiz-history-title">Lịch sử làm bài</div>
+                {loadingHistory ? (
+                  <div className="lesson-quiz-history-loading">
+                    <Spin size="small" />
+                  </div>
+                ) : examHistory.length > 0 ? (
+                  <div className="lesson-quiz-history-list">
+                    {examHistory.map(history => (
+                      <div
+                        key={history.id}
+                        className="lesson-quiz-history-item"
+                      >
+                        <div className="lesson-quiz-history-item-header">
+                          <span className="lesson-quiz-history-item-name">
+                            {history.examName}
+                          </span>
+                          <span className="lesson-quiz-history-item-point">
+                            {history.point} điểm
+                          </span>
+                        </div>
+                        <div className="lesson-quiz-history-item-time">
+                          <CalendarOutlined className="lesson-quiz-history-item-icon" />
+                          <span>{formatDate(history.completionTime)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="lesson-quiz-history-empty">
+                    <span>Chưa có lịch sử làm bài</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

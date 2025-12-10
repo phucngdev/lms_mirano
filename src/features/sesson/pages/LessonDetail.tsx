@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import RenderLesson from '../components/lesson_type/RenderLesson';
-import { LessonEntity, LessonStudentEntity } from '#/api/requests';
+import {
+  DocumentEntityType,
+  LessonEntity,
+  LessonStudentEntity,
+} from '#/api/requests';
 import './LessonDetail.scss';
 import { message } from 'antd';
 import { getLessonByIdService } from '#/api/services/lession.service';
@@ -15,6 +19,9 @@ const LessonDetail = () => {
   const [activeTab, setActiveTab] = useState<'description' | 'file' | 'chat'>(
     'description',
   );
+  const [description, setDescription] = useState<string>('');
+  const [documents, setDocuments] = useState<DocumentEntityType[]>([]);
+
   const handleNextLesson = () => {};
 
   const fetchLesson = async () => {
@@ -23,7 +30,7 @@ const LessonDetail = () => {
       setLesson(response.data.data);
     } catch (error) {
       console.error(error);
-      message.error('Lỗi khi tải bài học');
+      // message.error('Lỗi khi tải bài học');
     }
   };
 
@@ -79,11 +86,14 @@ const LessonDetail = () => {
       </div>
 
       <div className="lesson-content-body">
-        <RenderLesson lesson={lesson} />
+        <RenderLesson
+          lesson={lesson}
+          setDescription={setDescription}
+          setDocuments={setDocuments}
+        />
       </div>
 
-      {(lesson?.type === LessonEntity.type.GRAMMAR ||
-        lesson?.type === LessonEntity.type.VIDEO ||
+      {(lesson?.type === LessonEntity.type.VIDEO ||
         lesson?.type === LessonEntity.type.TEXT) && (
         <>
           <div className="lesson-content-tabs">
@@ -108,8 +118,10 @@ const LessonDetail = () => {
             </div>
           </div>
           <div className="lesson-content-tabs-content">
-            {activeTab === 'description' && <Description description={''} />}
-            {activeTab === 'file' && <File />}
+            {activeTab === 'description' && (
+              <Description description={description} />
+            )}
+            {activeTab === 'file' && <File documents={documents} />}
             {activeTab === 'chat' && <Chat />}
           </div>
         </>
