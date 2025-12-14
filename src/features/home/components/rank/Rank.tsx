@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './rank.scss';
 import { IconStar, ArrowRight } from '../../../../assets/svg/externalIcon';
+import avatarRank from '#/assets/images/specialRanking/avatarrank.png';
 
 const CoinIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -31,14 +32,14 @@ const Rank = () => {
       rank: 2,
       name: 'Nguyễn Văn Anh',
       score: 800,
-      avatar: '/src/assets/images/specialRanking/avatarrank.png',
+      avatar: avatarRank,
       color: '#5BAFFF',
     },
     {
       rank: 1,
       name: 'Nguyễn Thị Anh',
       score: 1000,
-      avatar: '/src/assets/images/specialRanking/avatarrank.png',
+      avatar: avatarRank,
       color: '#FF6B6B',
       isFirst: true,
     },
@@ -46,7 +47,7 @@ const Rank = () => {
       rank: 3,
       name: 'Nguyễn Thị Anh',
       score: 600,
-      avatar: '/src/assets/images/specialRanking/avatarrank.png',
+      avatar: avatarRank,
       color: '#FFA500',
     },
   ];
@@ -55,7 +56,7 @@ const Rank = () => {
     rank: i + 4,
     name: 'Nguyễn Văn Anh',
     score: 400,
-    avatar: '/src/assets/images/specialRanking/avatarrank.png',
+    avatar: avatarRank,
     isCurrentUser: i === 5, // Highlight row 242 (which is rank 9 in the list)
   }));
 
