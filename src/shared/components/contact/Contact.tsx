@@ -1,7 +1,15 @@
 import './Contact.scss';
 import { ArrowRight } from '../../../assets/svg/externalIcon';
 import contactImage from '#/assets/images/contact/contact2.png';
+import { useNavigate } from 'react-router-dom';
+
 const Contact = () => {
+  const navigate = useNavigate();
+
+  const handleContactClick = () => {
+    navigate('/contact');
+  };
+
   return (
     <section className="contact">
       <div className="contact-container">
@@ -14,7 +22,7 @@ const Contact = () => {
               Chúng tôi luôn sẵn sàng hỗ trợ bạn về khóa học, lộ trình luyện thi
               hoặc các thắc mắc về nền tảng e-learning
             </p>
-            <button className="contact-button">
+            <button className="contact-button" onClick={handleContactClick}>
               Liên hệ tư vấn ngay
               <ArrowRight color="#fff" width={20} height={20} />
             </button>

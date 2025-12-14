@@ -8,6 +8,7 @@ import type {
   RefreshTokenInputDto,
   RegisterInputDto,
   ResetPasswordInputDto,
+  VerifyCodeInputDto,
 } from '../requests';
 
 export const loginService = async (data: LoginInputDto) =>
@@ -27,6 +28,9 @@ export const forrgotPasswordService = async (data: ForgotPasswordInputDto) =>
 
 export const resetPasswordService = async (data: ResetPasswordInputDto) =>
   await jsonAxios.post(`auth/reset-password`, data);
+
+export const verifyOtpService = async (data: VerifyCodeInputDto) =>
+  await jsonAxios.post(`auth/verify-otp`, data);
 
 export const loginGoogleService = async (data: LoginGoogleDto) =>
   await jsonAxios.post(`auth/login-google`, data);

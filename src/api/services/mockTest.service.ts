@@ -15,8 +15,10 @@ export const getTestByIdMockTestService = async (
   limit: number,
   offset: number,
 ) => await jsonAxios.get(`test/${id}?limit=${limit}&offset=${offset}`);
+
 export const getByIdMockTestService = async (id: string) =>
   await jsonAxios.get(`test-category/${id}`);
+
 export const getTestDetailByIdTestService = async (
   id: string,
   limit: number,

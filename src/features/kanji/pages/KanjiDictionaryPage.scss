@@ -1,0 +1,395 @@
+.kanji-dictionary-page {
+  min-height: 100vh;
+  //   background: #f5f7fa;
+
+  // Header Section
+  .kanji-dictionary-header {
+    position: relative;
+    background-image: url('/src/assets/images/banner/bannerMankai.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 40px 80px;
+    overflow: hidden;
+    min-height: 300px;
+
+    // Overlay để text dễ đọc hơn
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: 0;
+    }
+
+    .kanji-dictionary-header-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+
+      .kanji-dictionary-title {
+        font-size: 48px;
+        font-weight: 800;
+        color: #1e40af;
+        margin: 0 0 40px 0;
+        text-shadow:
+          0 2px 8px rgba(255, 255, 255, 0.8),
+          0 0 4px rgba(255, 255, 255, 0.5);
+      }
+
+      .kanji-dictionary-search {
+        display: flex;
+        gap: 16px;
+        max-width: 600px;
+        margin: 0 auto;
+        align-items: center;
+
+        .kanji-search-input {
+          flex: 1;
+          height: 50px;
+          border-radius: 12px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.9);
+          font-size: 16px;
+          padding: 0 20px;
+
+          &:focus,
+          &:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: white;
+          }
+
+          .search-icon {
+            color: #f97316;
+            font-size: 20px;
+          }
+        }
+
+        .kanji-search-button {
+          height: 50px;
+          padding: 10px 20px;
+          border-radius: 12px;
+          background-color: #f37142;
+          color: #fff;
+          border: 1px solid var(--Orange-600, #dd673c);
+          font-size: 18px;
+          font-weight: 700;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(243, 113, 66, 0.3);
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243, 113, 66, 0.4);
+            background: linear-gradient(135deg, #ff7c4e 0%, #f37142 100%);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
+        }
+      }
+    }
+  }
+
+  // Main Content
+  .kanji-dictionary-content {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    background: white;
+    border-radius: 24px 24px 0 0;
+    // box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    min-height: calc(100vh - 300px);
+
+    // Navigation
+    .kanji-dictionary-navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+
+      .kanji-nav-button {
+        height: 40px;
+        padding: 0 20px;
+        border-radius: 12px;
+        border: 2px solid #d1d5db;
+        background: white;
+        color: #6b7280;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover:not(:disabled) {
+          border-color: #f97316;
+          color: #f97316;
+          background: #fff7ed;
+        }
+
+        &:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+      }
+
+      .kanji-dictionary-counter {
+        font-size: 18px;
+        font-weight: 600;
+        color: #374151;
+      }
+    }
+
+    // Featured Kanji
+    .kanji-featured {
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 2px solid #e5e7eb;
+
+      .kanji-character-section {
+        display: flex;
+        align-items: baseline;
+        gap: 24px;
+        margin-bottom: 16px;
+
+        .kanji-character {
+          font-size: 120px;
+          font-weight: 900;
+          color: #1f2937;
+          line-height: 1;
+        }
+
+        .kanji-meaning {
+          font-size: 64px;
+          font-weight: 800;
+          color: #dc2626;
+          line-height: 1;
+        }
+      }
+
+      .kanji-composition {
+        font-size: 18px;
+        color: #6b7280;
+        margin-top: 12px;
+      }
+    }
+
+    // Section Styles
+    .kanji-section {
+      margin-bottom: 40px;
+
+      .kanji-section-title {
+        font-size: 32px;
+        font-weight: 800;
+        color: #f97316;
+        margin: 0 0 16px 0;
+      }
+
+      .kanji-section-content {
+        font-size: 18px;
+        line-height: 1.8;
+        color: #374151;
+        margin: 0;
+      }
+    }
+
+    // Jukugo Section
+    .jukugo-item {
+      margin-bottom: 32px;
+      padding: 24px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border-left: 4px solid #f97316;
+
+      .jukugo-character {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0 0 12px 0;
+      }
+
+      .jukugo-reading {
+        font-size: 20px;
+        color: #6b7280;
+        margin: 0 0 8px 0;
+        font-weight: 600;
+      }
+
+      .jukugo-composition {
+        font-size: 18px;
+        color: #4b5563;
+        margin: 0 0 12px 0;
+        font-weight: 500;
+      }
+
+      .jukugo-meaning {
+        font-size: 16px;
+        color: #374151;
+        margin: 0;
+        line-height: 1.7;
+      }
+    }
+
+    // Lookalikes Section
+    .lookalikes-table {
+      margin-bottom: 24px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+
+      .lookalikes-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        background: #f3f4f6;
+        border-bottom: 2px solid #e5e7eb;
+
+        .lookalikes-header-cell {
+          padding: 16px;
+          font-size: 16px;
+          font-weight: 700;
+          color: #374151;
+          text-align: center;
+          border-right: 2px solid #e5e7eb;
+
+          &:last-child {
+            border-right: none;
+          }
+        }
+      }
+
+      .lookalikes-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        border-bottom: 1px solid #e5e7eb;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .lookalikes-cell {
+          padding: 20px 16px;
+          font-size: 16px;
+          color: #374151;
+          text-align: center;
+          border-right: 1px solid #e5e7eb;
+
+          &:last-child {
+            border-right: none;
+          }
+
+          &.lookalikes-kanji {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1f2937;
+          }
+        }
+      }
+    }
+
+    .lookalikes-explanations {
+      margin-top: 20px;
+
+      p {
+        font-size: 16px;
+        color: #4b5563;
+        line-height: 1.7;
+        margin: 0 0 12px 0;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    // Synonyms Section
+    .synonym-item {
+      margin-bottom: 16px;
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 8px;
+
+      .synonym-content {
+        font-size: 16px;
+        color: #374151;
+        margin: 0;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  // Responsive
+  @media (max-width: 768px) {
+    .kanji-dictionary-header {
+      padding: 40px 20px 60px;
+
+      .kanji-dictionary-header-content {
+        .kanji-dictionary-title {
+          font-size: 32px;
+          margin-bottom: 30px;
+        }
+
+        .kanji-dictionary-search {
+          flex-direction: column;
+
+          .kanji-search-input,
+          .kanji-search-button {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .kanji-dictionary-content {
+      padding: 40px 20px;
+      margin-top: -30px;
+
+      .kanji-featured {
+        .kanji-character-section {
+          flex-direction: column;
+          gap: 16px;
+
+          .kanji-character {
+            font-size: 80px;
+          }
+
+          .kanji-meaning {
+            font-size: 48px;
+          }
+        }
+      }
+
+      .kanji-section {
+        .kanji-section-title {
+          font-size: 24px;
+        }
+
+        .kanji-section-content {
+          font-size: 16px;
+        }
+      }
+
+      .lookalikes-table {
+        .lookalikes-header,
+        .lookalikes-row {
+          grid-template-columns: 1fr;
+
+          .lookalikes-header-cell,
+          .lookalikes-cell {
+            border-right: none;
+            border-bottom: 1px solid #e5e7eb;
+
+            &:last-child {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}

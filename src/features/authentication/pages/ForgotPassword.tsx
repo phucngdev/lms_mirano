@@ -1,26 +1,22 @@
 import { useState } from 'react';
-import { Input, Checkbox, message } from 'antd';
-import type { CheckboxProps } from 'antd';
+import { Input, message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import './Login.scss';
-import { loginService } from '#/api/services/auth.service';
-import Cookies from 'js-cookie';
+import './ForgotPassword.scss';
+import { forrgotPasswordService } from '#/api/services/auth.service';
 import frame_auth from '#/assets/images/login/frame_auth.png';
 
 interface FormErrors {
   email?: string;
-  password?: string;
 }
 
-const Login = () => {
+const ForgotPassword = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const onChange: CheckboxProps['onChange'] = () => {};
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateField = (name: string, value: string): string | undefined => {
     switch (name) {
@@ -34,12 +30,6 @@ const Login = () => {
         }
         return undefined;
 
-      case 'password':
-        if (!value) {
-          return 'Vui lòng nhập mật khẩu';
-        }
-        return undefined;
-
       default:
         return undefined;
     }
@@ -47,7 +37,7 @@ const Login = () => {
 
   const handleBlur = (name: string) => {
     setTouched(prev => ({ ...prev, [name]: true }));
-    const value = name === 'email' ? email : password;
+    const value = name === 'email' ? email : '';
     const error = validateField(name, value);
     setErrors(prev => ({ ...prev, [name]: error }));
   };
@@ -55,8 +45,6 @@ const Login = () => {
   const handleChange = (name: string, value: string) => {
     if (name === 'email') {
       setEmail(value);
-    } else if (name === 'password') {
-      setPassword(value);
     }
 
     // Clear error when user starts typing
@@ -79,16 +67,9 @@ const Login = () => {
       isValid = false;
     }
 
-    const passwordError = validateField('password', password);
-    if (passwordError) {
-      newErrors.password = passwordError;
-      isValid = false;
-    }
-
     setErrors(newErrors);
     setTouched({
       email: true,
-      password: true,
     });
 
     return isValid;
@@ -101,29 +82,34 @@ const Login = () => {
     const isValid = validateForm();
 
     if (!isValid) {
-      // Don't proceed if validation fails
-      // Errors are already displayed under inputs
       return;
     }
 
-    // Only call API if validation passes
     try {
-      const response = await loginService({ email, password });
-      if (response.data.statusCode === 201) {
-        navigate('/');
-        Cookies.set('accessToken', response.data.data.accessToken);
-        Cookies.set('refreshToken', response.data.data.refreshToken);
-        Cookies.set('user', JSON.stringify(response.data.data.user));
-        message.success('Đăng nhập thành công');
+      setIsSubmitting(true);
+      const response = await forrgotPasswordService({ email });
+      console.log('🚀 ~ handleSubmit ~ response:', response);
+      if (
+        response.data.statusCode === 201 ||
+        response.data.statusCode === 200
+      ) {
+        message.success('Mã OTP đã được gửi đến email của bạn');
+        navigate('/auth/verify-otp-forgot-password', {
+          state: { email },
+        });
       } else {
-        // Handle case when statusCode is not 201
-        message.error('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin');
+        message.error('Gửi mã OTP thất bại. Vui lòng thử lại');
       }
     } catch (error: any) {
       console.log('🚀 ~ handleSubmit ~ error:', error);
-      // Only show API error message if validation passed
-      const errorMessage = 'Đăng nhập thất bại. Vui lòng thử lại';
-      message.error(errorMessage);
+      if (error?.response?.data?.statusCode === 404) {
+        message.error('Email không tồn tại');
+        return;
+      } else {
+        message.error('Gửi mã OTP thất bại. Vui lòng thử lại');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -137,12 +123,14 @@ const Login = () => {
 
       <div className="login-right">
         <div className="login-form-wrapper">
-          <h1 className="login-title">{t('login.title')}</h1>
-          <p className="login-subtitle">{t('login.subtitle')}</p>
+          <h1 className="login-title">Quên mật khẩu</h1>
+          <p className="login-subtitle">
+            Nhập email của bạn để nhận mã OTP xác thực
+          </p>
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="email">{t('login.email')}</label>
+              <label htmlFor="email">Email</label>
               <Input
                 id="email"
                 type="email"
@@ -152,48 +140,18 @@ const Login = () => {
                 onBlur={() => handleBlur('email')}
                 status={errors.email && touched.email ? 'error' : ''}
                 className={errors.email && touched.email ? 'error' : ''}
+                disabled={isSubmitting}
               />
               {errors.email && touched.email && (
                 <span className="error-message">{errors.email}</span>
               )}
             </div>
 
-            <div className="form-group">
-              <label htmlFor="password">{t('login.password')}</label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="•••••••••"
-                value={password}
-                onChange={e => handleChange('password', e.target.value)}
-                onBlur={() => handleBlur('password')}
-                status={errors.password && touched.password ? 'error' : ''}
-                className={errors.password && touched.password ? 'error' : ''}
-                // iconRender={visible =>
-                //   visible ? <EyeOutlined /> : <EyeInvisibleOutlined />
-                // }
-              />
-              {errors.password && touched.password && (
-                <span className="error-message">{errors.password}</span>
-              )}
-            </div>
-
-            <div className="forgot-password-row">
-              <Link to="/forgot-password" className="forgot-password-link">
-                {t('login.forgotPassword')}
-              </Link>
-              <Link to="/auth/register" className="create-account-link">
-                {t('login.createAccount')}
-              </Link>
-            </div>
-
-            <div className="remember-me">
-              <Checkbox onChange={onChange}>
-                {t('login.rememberLogin')}
-              </Checkbox>
-            </div>
-
-            <button type="submit" className="login-button">
+            <button
+              type="submit"
+              className="login-button"
+              disabled={isSubmitting}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="165"
@@ -234,8 +192,14 @@ const Login = () => {
                   </g>
                 </g>
               </svg>
-              {t('login.title')}
+              {isSubmitting ? 'Đang gửi...' : 'Xác nhận'}
             </button>
+
+            <div className="back-to-login">
+              <Link to="/auth/login" className="back-link">
+                ← Quay lại đăng nhập
+              </Link>
+            </div>
           </form>
         </div>
       </div>
@@ -243,4 +207,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

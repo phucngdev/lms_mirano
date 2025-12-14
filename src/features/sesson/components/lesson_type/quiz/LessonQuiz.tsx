@@ -1184,9 +1184,7 @@ const LessonQuiz: React.FC<LessonQuizProps> = ({
     // Calculate point (percentage of correct answers) - use direct calculation
     const correctCount = calculateCorrectCountDirectly();
     const point =
-      totalQuestions > 0
-        ? Math.round((correctCount / totalQuestions) * 100)
-        : 0;
+      totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 10) : 0;
 
     // Get courseId and classId from sessionStorage
     const courseId = sessionStorage.getItem('courseId') || '';
@@ -1279,11 +1277,13 @@ const LessonQuiz: React.FC<LessonQuizProps> = ({
         }}
         className={`lesson-quiz-question ${isCurrent ? 'current' : ''}`}
       >
-        <div className="lesson-quiz-question-header">
-          <span className="lesson-quiz-question-number">
-            Câu hỏi {index + 1}
-          </span>
-        </div>
+        {question.type !== QuestionEntity.type.ESSAY && (
+          <div className="lesson-quiz-question-header">
+            <span className="lesson-quiz-question-number">
+              Câu hỏi {index + 1}
+            </span>
+          </div>
+        )}
 
         {/* Multiple Choice Horizontal Question */}
         {question.type === QuestionEntity.type.MULTIPLE_CHOICE_HORIZONTAL && (
@@ -1429,11 +1429,7 @@ const LessonQuiz: React.FC<LessonQuizProps> = ({
 
         {/* Essay Question */}
         {question.type === 'ESSAY' && (
-          <EssayQuestion
-            question={question}
-            uploadedFiles={answerState?.essayFiles || []}
-            onFileChange={files => handleEssayFileChange(question.id, files)}
-          />
+          <EssayQuestion question={question} examId={exam?.exam?.id} />
         )}
       </div>
     );

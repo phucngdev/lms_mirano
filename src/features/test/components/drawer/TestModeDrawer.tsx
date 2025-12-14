@@ -6,15 +6,15 @@ interface TestModeDrawerProps {
   onClose: () => void;
   timeRemaining: number;
   currentPartQuestions: Array<{
-    id: number;
-    partId: number;
-    groupId: number;
+    id: string;
+    partId: string;
+    groupId: string;
   }>;
   selectedAnswers: Record<string, string>;
-  selectedQuestionId: number;
-  selectedPartId: number;
-  selectedQuestionGroupId: number;
-  onQuestionClick: (questionId: number) => void;
+  selectedQuestionId: string;
+  selectedPartId: string;
+  selectedQuestionGroupId: string;
+  onQuestionClick: (questionId: string) => void;
   onNextPart: () => void;
   formatTime: (seconds: number) => string;
 }
@@ -32,7 +32,7 @@ const TestModeDrawer = ({
   onNextPart,
   formatTime,
 }: TestModeDrawerProps) => {
-  const handleQuestionClick = (questionId: number) => {
+  const handleQuestionClick = (questionId: string) => {
     onQuestionClick(questionId);
     onClose();
   };

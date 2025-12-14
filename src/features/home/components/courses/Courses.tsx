@@ -71,7 +71,7 @@ const Courses = () => {
                         </div>
                         <div className="courses-progress-info">
                           <span className="courses-progress-percent">
-                            {course.progress}%
+                            {Math.round(course.progress)}%
                           </span>
                           <DotIcon />
                           <span className="courses-progress-remaining">

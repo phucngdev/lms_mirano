@@ -6,6 +6,7 @@ import {
   EditOutlined,
   HistoryOutlined,
   LogoutOutlined,
+  FileTextOutlined,
 } from '@ant-design/icons';
 import './Header.scss';
 import logo from '/src/assets/images/header/logo_mirano.png';
@@ -78,6 +79,19 @@ export function Header() {
         </Link>
       ),
     },
+    {
+      key: 'essay-history',
+      label: (
+        <Link
+          to="/essay-history"
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <FileTextOutlined style={{ marginRight: 8 }} />
+          Bài tự luận
+        </Link>
+      ),
+    },
+
     {
       type: 'divider',
     },

@@ -3,7 +3,7 @@ import './TestResultModal.scss';
 import sparkles from '#/assets/images/GlobalVocabulary/medal.png';
 
 interface PartScore {
-  partId: number;
+  partId: string;
   partName: string;
   score: number;
   total: number;

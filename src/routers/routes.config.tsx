@@ -2,6 +2,9 @@ import { NotFound } from '#/shared/components/notfound/NotFound';
 import Login from '#/features/authentication/pages/Login';
 import Register from '#/features/authentication/pages/Register';
 import VerifyOtp from '#/features/authentication/pages/VerifyOtp';
+import ForgotPassword from '#/features/authentication/pages/ForgotPassword';
+import VerifyOtpForgotPassword from '#/features/authentication/pages/VerifyOtpForgotPassword';
+import ResetPassword from '#/features/authentication/pages/ResetPassword';
 import PublicLayout from './PublicRouter';
 import Home from '#/features/home/pages/Home';
 import CourseDetail from '#/features/course/pages/CourseDetail';
@@ -17,6 +20,10 @@ import TopicVocabPage from '#/features/topics/pages/TopicVocabPage';
 import ProfilePage from '#/features/profile/pages/ProfilePage';
 import ExamHistoryPage from '#/features/history/pages/ExamHistoryPage';
 import ExamResultDetailPage from '#/features/history/pages/ExamResultDetailPage';
+import KanjiDictionaryPage from '#/features/kanji/pages/KanjiDictionaryPage';
+import ContactPage from '#/features/contact/pages/ContactPage';
+import KaiwaAIPage from '#/features/kaiwaAI/pages/KaiwaAIPage';
+import KaiwaAIConversationPage from '#/features/kaiwaAI/pages/KaiwaAIConversationPage';
 
 const routesConfig = [
   {
@@ -34,7 +41,19 @@ const routesConfig = [
         element: <VerifyOtp />,
         path: 'verify-otp',
       },
+      {
+        element: <VerifyOtpForgotPassword />,
+        path: 'verify-otp-forgot-password',
+      },
+      {
+        element: <ResetPassword />,
+        path: 'reset-password',
+      },
     ],
+  },
+  {
+    element: <ForgotPassword />,
+    path: '/forgot-password',
   },
   {
     path: '/',
@@ -62,7 +81,7 @@ const routesConfig = [
       },
       {
         element: <TestMode />,
-        path: '/test-mode/:id',
+        path: '/test-mode/:test_detail_id/:id',
       },
       {
         element: <MyClass />,
@@ -87,6 +106,22 @@ const routesConfig = [
       {
         element: <ExamResultDetailPage />,
         path: '/exam-history/:id',
+      },
+      {
+        element: <KanjiDictionaryPage />,
+        path: '/kanji-dictionary',
+      },
+      {
+        element: <ContactPage />,
+        path: '/contact',
+      },
+      {
+        element: <KaiwaAIPage />,
+        path: '/kaiwa-ai',
+      },
+      {
+        element: <KaiwaAIConversationPage />,
+        path: '/kaiwa-ai/conversation/:topicId',
       },
     ],
   },

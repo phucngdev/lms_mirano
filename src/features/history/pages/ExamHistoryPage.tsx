@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Breadcrumb, Spin, Pagination, Card } from 'antd';
-import { CalendarOutlined, TrophyOutlined } from '@ant-design/icons';
+import { Breadcrumb, Spin, Pagination } from 'antd';
+import {
+  CalendarOutlined,
+  TrophyOutlined,
+  ClockCircleOutlined,
+  UserOutlined,
+  RightOutlined,
+} from '@ant-design/icons';
 import { getTestResultUserService } from '#/api/services/mockTest.service';
 import Cookies from 'js-cookie';
 import './ExamHistoryPage.scss';
@@ -97,70 +103,95 @@ const ExamHistoryPage = () => {
 
         {/* Test Results List */}
         {loading ? (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              padding: '40px',
-            }}
-          >
+          <div className="exam-history-loading">
             <Spin size="large" />
           </div>
         ) : testResults.length > 0 ? (
           <>
+            {/* Table Header */}
+            <div className="exam-history-table-header">
+              <div className="exam-history-header-cell exam-history-header-test">
+                Tên bài thi
+              </div>
+              <div className="exam-history-header-cell exam-history-header-date">
+                Ngày thi
+              </div>
+              <div className="exam-history-header-cell exam-history-header-duration">
+                Thời gian
+              </div>
+              <div className="exam-history-header-cell exam-history-header-participants">
+                Người tham gia
+              </div>
+              <div className="exam-history-header-cell exam-history-header-score">
+                Điểm số
+              </div>
+              <div className="exam-history-header-cell exam-history-header-action">
+                Thao tác
+              </div>
+            </div>
+
+            {/* Table Body */}
             <div className="exam-history-list">
               {testResults.map(result => (
-                <Card
+                <div
                   key={result.id}
-                  className="exam-history-card"
-                  hoverable
+                  className="exam-history-row"
                   onClick={() => {
                     navigate(`/exam-history/${result.id}`, {
                       state: { testResult: result },
                     });
                   }}
                 >
-                  <div className="exam-history-card-content">
-                    <div className="exam-history-card-header">
-                      <h3 className="exam-history-test-name">
-                        {result.testId?.name || 'Không có tên'}
-                      </h3>
-                      <div className="exam-history-score">
-                        <TrophyOutlined className="exam-history-score-icon" />
-                        <span className="exam-history-score-value">
-                          {result.score} điểm
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* {result.testId?.description && (
-                      <p className="exam-history-description">
-                        {result.testId.description}
-                      </p>
-                    )} */}
-
-                    <div className="exam-history-meta">
-                      <div className="exam-history-meta-item">
-                        <CalendarOutlined className="exam-history-meta-icon" />
-                        <span>{formatDate(result.createdAt)}</span>
-                      </div>
-                      {result.testId?.duration && (
-                        <div className="exam-history-meta-item">
-                          <span>
-                            Thời gian: {formatDuration(result.testId.duration)}
-                          </span>
-                        </div>
-                      )}
-                      {result.testId?.numberOfParticipants !== undefined && (
-                        <div className="exam-history-meta-item">
-                          <span>
-                            {result.testId.numberOfParticipants} người tham gia
-                          </span>
-                        </div>
-                      )}
+                  <div className="exam-history-cell exam-history-cell-test">
+                    <span className="exam-history-cell-label">Tên bài thi</span>
+                    <h3 className="exam-history-test-name">
+                      {result.testId?.name || 'Không có tên'}
+                    </h3>
+                  </div>
+                  <div className="exam-history-cell exam-history-cell-date">
+                    <span className="exam-history-cell-label">Ngày thi</span>
+                    <div className="exam-history-meta-item">
+                      <CalendarOutlined className="exam-history-meta-icon" />
+                      <span>{formatDate(result.createdAt)}</span>
                     </div>
                   </div>
-                </Card>
+                  <div className="exam-history-cell exam-history-cell-duration">
+                    <span className="exam-history-cell-label">Thời gian</span>
+                    {result.testId?.duration ? (
+                      <div className="exam-history-meta-item">
+                        <ClockCircleOutlined className="exam-history-meta-icon" />
+                        <span>{formatDuration(result.testId.duration)}</span>
+                      </div>
+                    ) : (
+                      <span className="exam-history-empty-value">-</span>
+                    )}
+                  </div>
+                  <div className="exam-history-cell exam-history-cell-participants">
+                    <span className="exam-history-cell-label">
+                      Người tham gia
+                    </span>
+                    {result.testId?.numberOfParticipants !== undefined ? (
+                      <div className="exam-history-meta-item">
+                        <UserOutlined className="exam-history-meta-icon" />
+                        <span>{result.testId.numberOfParticipants}</span>
+                      </div>
+                    ) : (
+                      <span className="exam-history-empty-value">-</span>
+                    )}
+                  </div>
+                  <div className="exam-history-cell exam-history-cell-score">
+                    <span className="exam-history-cell-label">Điểm số</span>
+                    <div className="exam-history-score-badge">
+                      <TrophyOutlined className="exam-history-score-icon" />
+                      <span className="exam-history-score-value">
+                        {result.score}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="exam-history-cell exam-history-cell-action">
+                    <RightOutlined className="exam-history-action-icon" />
+                  </div>
+                </div>
               ))}
             </div>
 
@@ -180,7 +211,15 @@ const ExamHistoryPage = () => {
           </>
         ) : (
           <div className="exam-history-empty">
-            <p>Chưa có lịch sử thi thử nào</p>
+            <div className="exam-history-empty-icon">
+              <TrophyOutlined />
+            </div>
+            <p className="exam-history-empty-text">
+              Chưa có lịch sử thi thử nào
+            </p>
+            <p className="exam-history-empty-subtext">
+              Hãy bắt đầu làm bài thi để xem lịch sử tại đây
+            </p>
           </div>
         )}
       </div>

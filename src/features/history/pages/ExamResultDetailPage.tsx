@@ -15,7 +15,6 @@ import {
 } from 'antd';
 import {
   CalendarOutlined,
-  TrophyOutlined,
   ClockCircleOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -34,8 +33,10 @@ const ExamResultDetailPage = () => {
   const location = useLocation();
   const [testResult, setTestResult] =
     useState<TestResultUserDetailEntity | null>(null);
+  console.log('🚀 ~ ExamResultDetailPage ~ testResult:', testResult);
   const [loading, setLoading] = useState(true);
   const [activePartKey, setActivePartKey] = useState<string>('');
+  const [selectedQuestionId, setSelectedQuestionId] = useState<string>('');
 
   useEffect(() => {
     // Lấy data từ location.state (được pass từ ExamHistoryPage)
@@ -46,7 +47,18 @@ const ExamResultDetailPage = () => {
       setTestResult(stateData.testResult);
       // Set active tab là phần thi đầu tiên
       if (stateData.testResult.details.length > 0) {
-        setActivePartKey(stateData.testResult.details[0].id);
+        const firstDetail = stateData.testResult.details[0];
+        setActivePartKey(firstDetail.id);
+        // Set first question as selected
+        if (
+          firstDetail.questionGroups &&
+          firstDetail.questionGroups.length > 0
+        ) {
+          const firstGroup = firstDetail.questionGroups[0];
+          if (firstGroup.questions && firstGroup.questions.length > 0) {
+            setSelectedQuestionId(firstGroup.questions[0].id);
+          }
+        }
       }
       // Debug: Log dữ liệu để kiểm tra
       console.log('Test Result Data:', stateData.testResult);
@@ -139,32 +151,61 @@ const ExamResultDetailPage = () => {
     );
   }
 
-  // Tính từ questionGroups thay vì từ detail vì có thể detail không có giá trị
-  const totalCorrect = testResult.details
-    ? testResult.details.reduce((sum, detail) => {
-        const detailCorrect = detail.questionGroups
-          ? detail.questionGroups.reduce(
-              (groupSum, group) =>
-                groupSum + (Number(group.correctCountQuestionGroup) || 0),
-              0,
-            )
-          : Number(detail.correctCount) || 0;
-        return sum + detailCorrect;
-      }, 0)
-    : 0;
-  const totalQuestions = testResult.details
-    ? testResult.details.reduce((sum, detail) => {
-        const detailTotal = detail.questionGroups
-          ? detail.questionGroups.reduce(
-              (groupSum, group) =>
-                groupSum + (Number(group.numberOfQuestions) || 0),
-              0,
-            )
-          : Number(detail.totalQuestions) || 0;
-        return sum + detailTotal;
-      }, 0)
-    : 0;
-  const overallAccuracy = calculateAccuracy(totalCorrect, totalQuestions);
+  // Tính toán trực tiếp từ questions thực tế
+  let totalQuestions = 0;
+  let totalCorrect = 0;
+  let totalIncorrect = 0;
+  let totalUnanswered = 0;
+  let totalPossibleScore = 0; // Tổng điểm có thể đạt được
+  let achievedScore = testResult.score || 0; // Điểm đạt được
+
+  if (testResult.details) {
+    testResult.details.forEach(detail => {
+      let detailQuestionCount = 0;
+
+      if (detail.questionGroups) {
+        detail.questionGroups.forEach(group => {
+          if (group.questions) {
+            group.questions.forEach(question => {
+              totalQuestions++;
+              detailQuestionCount++;
+
+              const allOptions =
+                question.correctAnswers as MultipleChoiceAnswerDto[];
+              const correctAnswer = allOptions.find(option => option.isCorrect);
+              const userAnswer = question.userAnswers?.[0] as
+                | MultipleChoiceAnswerDto
+                | undefined;
+
+              if (userAnswer) {
+                const isCorrect =
+                  correctAnswer &&
+                  userAnswer &&
+                  correctAnswer.content === userAnswer.content;
+                if (isCorrect) {
+                  totalCorrect++;
+                } else {
+                  totalIncorrect++;
+                }
+              } else {
+                totalUnanswered++;
+              }
+            });
+          }
+        });
+      }
+
+      // Tính tổng điểm có thể đạt được: detail.point * số câu hỏi trong detail
+      if (detail.point && detailQuestionCount > 0) {
+        totalPossibleScore += detail.point * detailQuestionCount;
+      }
+    });
+  }
+
+  // Nếu không có point trong details, tính tổng điểm = số câu hỏi (mỗi câu 1 điểm)
+  if (totalPossibleScore === 0) {
+    totalPossibleScore = totalQuestions;
+  }
 
   return (
     <div className="exam-result-detail-page">
@@ -212,17 +253,28 @@ const ExamResultDetailPage = () => {
               <div className="exam-result-detail-score-circle">
                 <Progress
                   type="circle"
-                  percent={testResult.score}
-                  strokeColor={getScoreColor(testResult.score)}
-                  format={percent => (
+                  percent={
+                    totalPossibleScore > 0
+                      ? Math.round((achievedScore / totalPossibleScore) * 100)
+                      : 0
+                  }
+                  strokeColor={getScoreColor(
+                    totalPossibleScore > 0
+                      ? Math.round((achievedScore / totalPossibleScore) * 100)
+                      : 0,
+                  )}
+                  format={() => (
                     <div className="exam-result-detail-score-content">
-                      <TrophyOutlined className="exam-result-detail-score-icon" />
                       <span className="exam-result-detail-score-value">
-                        {percent}%
+                        {achievedScore}/{totalPossibleScore}
+                      </span>
+                      <span className="exam-result-detail-score-label">
+                        {' '}
+                        điểm
                       </span>
                     </div>
                   )}
-                  size={150}
+                  size={120}
                 />
               </div>
               <div className="exam-result-detail-accuracy">
@@ -230,7 +282,8 @@ const ExamResultDetailPage = () => {
                   Độ chính xác
                 </Text>
                 <Text className="exam-result-detail-accuracy-value">
-                  {overallAccuracy}% ({totalCorrect}/{totalQuestions})
+                  {Math.round((totalCorrect / totalQuestions) * 100)}% -{' '}
+                  {totalCorrect}/{totalQuestions}
                 </Text>
               </div>
             </div>
@@ -256,21 +309,324 @@ const ExamResultDetailPage = () => {
             </div>
             <div className="exam-result-detail-stat-item">
               <div className="exam-result-detail-stat-value incorrect">
-                {totalQuestions - totalCorrect}
+                {totalIncorrect}
               </div>
               <div className="exam-result-detail-stat-label">Câu sai</div>
             </div>
             <div className="exam-result-detail-stat-item">
-              <div className="exam-result-detail-stat-value">
-                {testResult.details.length}
+              <div className="exam-result-detail-stat-value unanswered">
+                {totalUnanswered}
               </div>
-              <div className="exam-result-detail-stat-label">Nhóm câu hỏi</div>
+              <div className="exam-result-detail-stat-label">
+                Số câu chưa làm
+              </div>
             </div>
           </div>
         </Card>
 
-        {/* Parts Tabs */}
-        <div className="exam-result-detail-parts">
+        {/* Parts Navigation Tabs */}
+        <div className="exam-result-detail-parts-nav">
+          <div className="exam-result-detail-parts-nav-wrapper">
+            {testResult.details.map((detail, index) => {
+              return (
+                <button
+                  key={detail.id}
+                  className={`exam-result-detail-part-nav-tab ${
+                    activePartKey === detail.id ? 'active' : ''
+                  }`}
+                  onClick={() => {
+                    setActivePartKey(detail.id);
+                    // Set first question as selected when switching parts
+                    if (detail.questionGroups.length > 0) {
+                      const firstGroup = detail.questionGroups[0];
+                      if (firstGroup.questions.length > 0) {
+                        setSelectedQuestionId(firstGroup.questions[0].id);
+                      }
+                    }
+                  }}
+                >
+                  {detail.name || `Phần ${index + 1}`}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Main Content - 2 Columns Layout */}
+        <div className="exam-result-detail-content">
+          {/* Left Panel - Questions */}
+          <div className="exam-result-detail-questions-panel">
+            {testResult.details
+              .find(d => d.id === activePartKey)
+              ?.questionGroups.map((questionGroup, groupIndex) => {
+                const currentPart = testResult.details.find(
+                  d => d.id === activePartKey,
+                );
+                if (!currentPart) return null;
+
+                // Calculate starting index for this group
+                let questionStartIndex = 0;
+                for (let i = 0; i < groupIndex; i++) {
+                  questionStartIndex +=
+                    currentPart.questionGroups[i].questions.length;
+                }
+
+                return (
+                  <div
+                    key={questionGroup.id}
+                    className="exam-result-detail-question-group"
+                  >
+                    {/* Group Header - Only show if there are multiple groups */}
+                    {currentPart.questionGroups.length > 1 && (
+                      <div className="exam-result-detail-question-group-header">
+                        <h3 className="exam-result-detail-question-group-title">
+                          {questionGroup.content
+                            ? `Nhóm ${groupIndex + 1}: ${questionGroup.content}`
+                            : `Nhóm ${groupIndex + 1}`}
+                        </h3>
+                      </div>
+                    )}
+
+                    {questionGroup.questions.map((question, qIndex) => {
+                      const questionNumber = questionStartIndex + qIndex + 1;
+
+                      const allOptions =
+                        question.correctAnswers as MultipleChoiceAnswerDto[];
+                      const correctAnswer = allOptions.find(
+                        option => option.isCorrect,
+                      );
+                      const userAnswer = question.userAnswers[0] as
+                        | MultipleChoiceAnswerDto
+                        | undefined;
+
+                      const isCorrect =
+                        correctAnswer &&
+                        userAnswer &&
+                        correctAnswer.content === userAnswer.content;
+
+                      return (
+                        <div
+                          key={question.id}
+                          data-question-id={question.id}
+                          className={`exam-result-detail-question-item ${
+                            selectedQuestionId === question.id ? 'active' : ''
+                          }`}
+                          onClick={() => setSelectedQuestionId(question.id)}
+                        >
+                          <div className="exam-result-detail-question-header">
+                            <div className="exam-result-detail-question-number">
+                              {questionNumber}.
+                            </div>
+                          </div>
+                          <div className="exam-result-detail-question-content">
+                            <div
+                              className="exam-result-detail-question-text"
+                              dangerouslySetInnerHTML={{
+                                __html: question.content,
+                              }}
+                            />
+
+                            {/* Options */}
+                            {/* {allOptions.length > 0 && (
+                              <div className="exam-result-detail-question-options">
+                                <Radio.Group
+                                  value={userAnswer?.content || undefined}
+                                  disabled
+                                >
+                                  <Space direction="vertical" size="middle">
+                                    {allOptions.map((option, optIndex) => {
+                                      const isUserAnswer =
+                                        userAnswer?.content === option.content;
+                                      const isCorrectOption =
+                                        correctAnswer?.content ===
+                                        option.content;
+                                      return (
+                                        <Radio
+                                          key={optIndex}
+                                          value={option.content}
+                                          className={`exam-result-detail-option ${
+                                            isCorrectOption
+                                              ? 'correct-answer'
+                                              : ''
+                                          } ${
+                                            isUserAnswer && !isCorrectOption
+                                              ? 'wrong-answer'
+                                              : ''
+                                          }`}
+                                        >
+                                          <span
+                                            dangerouslySetInnerHTML={{
+                                              __html: option.content,
+                                            }}
+                                          />
+                                        </Radio>
+                                      );
+                                    })}
+                                  </Space>
+                                </Radio.Group>
+                              </div>
+                            )} */}
+
+                            {/* Answer Summary */}
+                            <div className="exam-result-detail-answer-summary">
+                              {correctAnswer && (
+                                <div className="exam-result-detail-answer-item correct-answer-item">
+                                  <CheckCircleOutlined className="exam-result-detail-answer-icon" />
+                                  <div className="exam-result-detail-answer-content">
+                                    <span className="exam-result-detail-answer-label">
+                                      Đáp án đúng:
+                                    </span>
+                                    <span
+                                      className="exam-result-detail-answer-text"
+                                      dangerouslySetInnerHTML={{
+                                        __html: correctAnswer.content,
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                              {userAnswer && (
+                                <div
+                                  className={`exam-result-detail-answer-item ${
+                                    isCorrect
+                                      ? 'correct-answer-item'
+                                      : 'wrong-answer-item'
+                                  }`}
+                                >
+                                  {isCorrect ? (
+                                    <CheckCircleOutlined className="exam-result-detail-answer-icon" />
+                                  ) : (
+                                    <CloseCircleOutlined className="exam-result-detail-answer-icon" />
+                                  )}
+                                  <div className="exam-result-detail-answer-content">
+                                    <span className="exam-result-detail-answer-label">
+                                      Đáp án của bạn:
+                                    </span>
+                                    <span
+                                      className="exam-result-detail-answer-text"
+                                      dangerouslySetInnerHTML={{
+                                        __html: userAnswer.content,
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                              {!userAnswer && (
+                                <div className="exam-result-detail-answer-item no-answer-item">
+                                  <CloseCircleOutlined className="exam-result-detail-answer-icon" />
+                                  <div className="exam-result-detail-answer-content">
+                                    <span className="exam-result-detail-answer-label">
+                                      Bạn chưa chọn đáp án
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            {question.explain && (
+                              <div className="exam-result-detail-question-explain">
+                                <Text type="secondary">
+                                  <strong>Giải thích: </strong>
+                                  <span
+                                    dangerouslySetInnerHTML={{
+                                      __html: question.explain,
+                                    }}
+                                  />
+                                </Text>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="exam-result-detail-sidebar">
+            {/* Question List */}
+            <div className="exam-result-detail-question-list">
+              <div className="exam-result-detail-question-list-header">
+                Danh sách câu hỏi
+              </div>
+              <div className="exam-result-detail-question-grid">
+                {testResult.details
+                  .find(d => d.id === activePartKey)
+                  ?.questionGroups.map((questionGroup, groupIndex) => {
+                    const currentPart = testResult.details.find(
+                      d => d.id === activePartKey,
+                    );
+                    if (!currentPart) return null;
+
+                    // Calculate starting index for this group
+                    let questionStartIndex = 0;
+                    for (let i = 0; i < groupIndex; i++) {
+                      questionStartIndex +=
+                        currentPart.questionGroups[i].questions.length;
+                    }
+
+                    return questionGroup.questions.map((question, qIndex) => {
+                      const questionNum = questionStartIndex + qIndex + 1;
+
+                      const allOptions =
+                        question.correctAnswers as MultipleChoiceAnswerDto[];
+                      const correctAnswer = allOptions.find(
+                        option => option.isCorrect,
+                      );
+                      const userAnswer = question.userAnswers[0] as
+                        | MultipleChoiceAnswerDto
+                        | undefined;
+
+                      // Check if answer is correct (only if user selected an answer)
+                      const isCorrect =
+                        userAnswer &&
+                        correctAnswer &&
+                        correctAnswer.content === userAnswer.content;
+
+                      // If no answer selected, show as incorrect (red)
+                      const showAsCorrect = isCorrect === true;
+                      const showAsIncorrect = !userAnswer || !isCorrect;
+
+                      return (
+                        <button
+                          key={question.id}
+                          className={`exam-result-detail-question-number-btn ${
+                            selectedQuestionId === question.id ? 'current' : ''
+                          } ${
+                            showAsCorrect
+                              ? 'correct'
+                              : showAsIncorrect
+                                ? 'incorrect'
+                                : ''
+                          }`}
+                          onClick={() => {
+                            setSelectedQuestionId(question.id);
+                            // Scroll to question
+                            const questionElement = document.querySelector(
+                              `[data-question-id="${question.id}"]`,
+                            );
+                            if (questionElement) {
+                              questionElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center',
+                              });
+                            }
+                          }}
+                        >
+                          {questionNum}
+                        </button>
+                      );
+                    });
+                  }) || []}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Old Parts Tabs - Hidden */}
+        <div className="exam-result-detail-parts" style={{ display: 'none' }}>
           <Title level={3} className="exam-result-detail-parts-title">
             Chi tiết các phần thi
           </Title>

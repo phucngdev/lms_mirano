@@ -77,6 +77,24 @@
     }
   }
 
+  .test-page-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 20px;
+    min-height: 400px;
+  }
+
+  .test-page-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 20px;
+    min-height: 400px;
+    color: #676767;
+    font-size: 16px;
+  }
+
   .test-page-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -127,7 +145,8 @@
       .test-logo-icon {
         width: 60px;
         height: 60px;
-        object-fit: contain;
+        object-fit: cover;
+        border-radius: 8px;
 
         @media (max-width: 768px) {
           width: 40px;

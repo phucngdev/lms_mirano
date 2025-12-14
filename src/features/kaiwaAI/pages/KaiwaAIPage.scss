@@ -1,0 +1,164 @@
+.kaiwa-ai-page {
+  min-height: 100vh;
+  padding: 60px 20px;
+
+  .kaiwa-ai-container {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .kaiwa-ai-header {
+    text-align: center;
+    margin-bottom: 60px;
+
+    .kaiwa-ai-title {
+      font-size: 48px;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin: 0 0 16px 0;
+      line-height: 1.2;
+    }
+
+    .kaiwa-ai-subtitle {
+      font-size: 18px;
+      color: #6b7280;
+      margin: 0;
+      line-height: 1.6;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .kaiwa-ai-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  .kaiwa-ai-topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .kaiwa-ai-topic-card {
+    border-radius: 16px;
+    border: 2px solid #e5e7eb;
+    background: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:hover {
+      border-color: #f37142;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(243, 113, 66, 0.2);
+    }
+
+    .ant-card-body {
+      padding: 0;
+    }
+
+    .topic-card-content {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+
+      .topic-card-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #f37142 0%, #ff7c4e 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        color: white;
+        box-shadow: 0 8px 20px rgba(243, 113, 66, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .topic-card-info {
+        width: 100%;
+
+        .topic-card-category {
+          display: inline-block;
+          padding: 6px 12px;
+          background: #fff1f2;
+          color: #f37142;
+          border-radius: 8px;
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 12px;
+        }
+
+        .topic-card-title {
+          font-size: 22px;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin: 0 0 12px 0;
+          line-height: 1.3;
+        }
+
+        .topic-card-description {
+          font-size: 14px;
+          color: #6b7280;
+          margin: 0;
+          line-height: 1.6;
+        }
+      }
+    }
+
+    &:hover {
+      .topic-card-icon {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 12px 28px rgba(243, 113, 66, 0.4);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 40px 16px;
+
+    .kaiwa-ai-header {
+      margin-bottom: 40px;
+
+      .kaiwa-ai-title {
+        font-size: 36px;
+      }
+
+      .kaiwa-ai-subtitle {
+        font-size: 16px;
+      }
+    }
+
+    .kaiwa-ai-topic-card {
+      .topic-card-content {
+        padding: 24px;
+
+        .topic-card-icon {
+          width: 64px;
+          height: 64px;
+          font-size: 28px;
+        }
+
+        .topic-card-info {
+          .topic-card-title {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  }
+}

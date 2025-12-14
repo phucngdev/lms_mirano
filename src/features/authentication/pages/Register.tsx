@@ -154,7 +154,6 @@ const Register = () => {
         phoneNumber: formData.phoneNumber || null,
         password: formData.password,
       });
-      console.log('🚀 ~ handleSubmit ~ response:', response);
 
       if (response.data.statusCode === 201 && response.data.data.success) {
         message.success('Đăng ký thành công! Vui lòng nhập mã OTP');

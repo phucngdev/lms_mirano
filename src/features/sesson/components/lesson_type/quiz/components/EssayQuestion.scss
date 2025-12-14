@@ -3,15 +3,13 @@
 
   .essay-question-content {
     margin-bottom: 24px;
-    padding: 20px;
-    background: #f9fafb;
     border-radius: 12px;
-    border-left: 4px solid #f37142;
 
     .essay-question-text {
       font-size: 16px;
       line-height: 1.8;
       color: #1d2939;
+      margin-bottom: 16px;
 
       @media (max-width: 768px) {
         font-size: 14px;
@@ -34,6 +32,39 @@
 
       :global(li) {
         margin-bottom: 8px;
+      }
+    }
+
+    .essay-question-exam-file {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+
+      .essay-question-exam-download-btn {
+        height: 40px;
+        padding: 0 20px;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 8px;
+        border: 2px solid #21c16b;
+        color: #21c16b;
+        background: white;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        // &:hover {
+        //   background: #21c16b;
+        //   color: white;
+        //   border-color: #21c16b;
+        //   transform: translateY(-2px);
+        //   box-shadow: 0 4px 12px rgba(33, 193, 107, 0.3);
+        // }
+
+        &:active {
+          transform: translateY(0);
+        }
       }
     }
   }
@@ -62,20 +93,131 @@
     }
 
     .essay-question-upload-button {
-      height: 44px;
-      padding: 0 24px;
-      font-size: 15px;
-      font-weight: 600;
-      border-radius: 8px;
-      border: 2px solid #f37142;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background-color: white;
+      border: 1px solid var(--Orange-400, #f58d68);
+      border-bottom: 4px solid var(--Orange-400, #f58d68);
+      border-radius: 1rem;
       color: #f37142;
-      background: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
       transition: all 0.3s ease;
+      height: auto;
+
+      @media (max-width: 768px) {
+        padding: 10px 16px;
+        font-size: 14px;
+        width: 100%;
+        justify-content: center;
+      }
 
       &:hover {
-        background: #f37142;
-        color: white;
-        border-color: #f37142;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(243, 113, 66, 0.3);
+      }
+    }
+
+    .essay-question-loading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .essay-question-submitted-section {
+      margin-top: 54px;
+      margin-bottom: 24px;
+      border-radius: 8px;
+
+      .essay-question-submitted-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1e40af;
+
+        .essay-question-submitted-icon {
+          font-size: 18px;
+          color: #3b82f6;
+        }
+      }
+
+      .essay-question-submitted-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .essay-question-submitted-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        background: white;
+        border: 1px solid #bfdbfe;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+          background: #f0f9ff;
+          border-color: #93c5fd;
+        }
+
+        .essay-question-file-icon {
+          font-size: 18px;
+          color: #3b82f6;
+          flex-shrink: 0;
+        }
+
+        .essay-question-file-info {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .essay-question-file-name {
+          font-size: 14px;
+          color: #1d2939;
+          font-weight: 500;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .essay-question-file-download {
+          color: #3b82f6;
+          padding: 4px 8px;
+          flex-shrink: 0;
+          font-size: 13px;
+
+          &:hover {
+            background: #dbeafe;
+            color: #2563eb;
+          }
+        }
+      }
+    }
+
+    .essay-question-upload-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1d2939;
+
+      .essay-question-upload-icon {
+        font-size: 18px;
+        color: #f37142;
       }
     }
 
@@ -165,4 +307,3 @@
     }
   }
 }
-

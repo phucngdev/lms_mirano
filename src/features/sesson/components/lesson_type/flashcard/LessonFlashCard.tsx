@@ -147,7 +147,7 @@ const LessonFlashCard = () => {
 
   const handlePrev = () => {
     if (totalCards > 0) {
-      setCurrentCard(prev => (prev - 1 + totalCards) % totalCards);
+    setCurrentCard(prev => (prev - 1 + totalCards) % totalCards);
       setIsFlipped(false); // Reset flip when changing card
     }
   };

@@ -1,107 +1,65 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Breadcrumb, Modal } from 'antd';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+import { Breadcrumb, Modal, Spin } from 'antd';
 import {
   IconPeople,
   IconClock,
   ArrowRight,
   DotIcon,
 } from '#/assets/svg/externalIcon';
+import { getTestByIdMockTestService } from '#/api/services/mockTest.service';
+import { TestEntity } from '#/api/requests';
 import './TestDetail.scss';
 
-interface TestPart {
-  id: number;
-  name: string;
-  time: number; // in minutes
-  questionCount: number;
-}
-
-interface TestExam {
-  id: number;
-  title: string;
-  participantCount: number;
-  duration: number; // in minutes
-  parts: TestPart[];
-}
-
 const TestDetail = () => {
-  // This would typically come from useParams or props
-  const testSeriesName = 'Cùng Manten N3';
+  const { id: categoryId } = useParams<{ id: string }>();
+  const location = useLocation();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedExam, setSelectedExam] = useState<TestExam | null>(null);
+  const [selectedExam, setSelectedExam] = useState<TestEntity | null>(null);
+  const [testExams, setTestExams] = useState<TestEntity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [testSeriesName, setTestSeriesName] = useState('');
 
-  const testExams: TestExam[] = [
-    {
-      id: 1,
-      title: 'Đề thi thử N3 (Trận 5)',
-      participantCount: 23,
-      duration: 139,
-      parts: [
-        { id: 1, name: 'CHỮ HÁN', time: 7, questionCount: 14 },
-        { id: 2, name: 'TỪ VỰNG', time: 15, questionCount: 21 },
-        { id: 3, name: 'NGỮ PHÁP', time: 10, questionCount: 13 },
-        { id: 4, name: 'NGỮ PHÁP (BÀI SAO)', time: 5, questionCount: 5 },
-        { id: 5, name: 'NGỮ PHÁP (BÀI ĐỤC LỖ)', time: 3, questionCount: 0 },
-        { id: 6, name: 'ĐỌC ĐOẢN VĂN', time: 0, questionCount: 0 },
-      ],
-    },
-    {
-      id: 2,
-      title: 'Đề thi thử N3 (Trận 4)',
-      participantCount: 14,
-      duration: 131,
-      parts: [
-        { id: 1, name: 'CHỮ HÁN', time: 7, questionCount: 14 },
-        { id: 2, name: 'TỪ VỰNG', time: 15, questionCount: 21 },
-        { id: 3, name: 'NGỮ PHÁP', time: 10, questionCount: 13 },
-      ],
-    },
-    {
-      id: 3,
-      title: 'Đề thi thử N3 (Trận 3)',
-      participantCount: 17,
-      duration: 40,
-      parts: [
-        { id: 1, name: 'CHỮ HÁN', time: 7, questionCount: 14 },
-        { id: 2, name: 'TỪ VỰNG', time: 15, questionCount: 21 },
-      ],
-    },
-    {
-      id: 4,
-      title: 'Đề thi thử N3 (Trận 2)',
-      participantCount: 22,
-      duration: 53,
-      parts: [
-        { id: 1, name: 'CHỮ HÁN', time: 7, questionCount: 14 },
-        { id: 2, name: 'TỪ VỰNG', time: 15, questionCount: 21 },
-        { id: 3, name: 'NGỮ PHÁP', time: 10, questionCount: 13 },
-      ],
-    },
-    {
-      id: 5,
-      title: 'Đề thi thử N3 (Trận 1)',
-      participantCount: 57,
-      duration: 58,
-      parts: [
-        { id: 1, name: 'CHỮ HÁN', time: 7, questionCount: 14 },
-        { id: 2, name: 'TỪ VỰNG', time: 15, questionCount: 21 },
-      ],
-    },
-    {
-      id: 6,
-      title: 'Đề thi thử N3 - Lần 1',
-      participantCount: 66,
-      duration: 119,
-      parts: [
-        { id: 1, name: 'CHỮ HÁN', time: 7, questionCount: 14 },
-        { id: 2, name: 'TỪ VỰNG', time: 15, questionCount: 21 },
-        { id: 3, name: 'NGỮ PHÁP', time: 10, questionCount: 13 },
-      ],
-    },
-  ];
+  // Get category name from location state (passed from TestPage)
+  useEffect(() => {
+    if (location.state?.categoryName) {
+      setTestSeriesName(location.state.categoryName);
+    }
+  }, [location.state]);
 
-  const handleOpenModal = (exam: TestExam) => {
+  useEffect(() => {
+    if (categoryId) {
+      fetchTestExams();
+    }
+  }, [categoryId]);
+
+  const fetchTestExams = async () => {
+    if (!categoryId) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await getTestByIdMockTestService(categoryId, 100, 0);
+      const apiData = response.data;
+
+      if (apiData.statusCode === 200 && apiData.data?.items) {
+        setTestExams(apiData.data.items);
+        // Set category name from first test if not set from location state
+        if (!testSeriesName && apiData.data.items.length > 0) {
+          // You might need to fetch category separately or get it from location state
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching test exams:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenModal = (exam: TestEntity) => {
     setSelectedExam(exam);
     setIsModalOpen(true);
   };
@@ -114,9 +72,23 @@ const TestDetail = () => {
   const handleStartTest = () => {
     if (selectedExam) {
       handleCloseModal();
-      navigate(`/test-mode/${selectedExam.id}`);
+      navigate(`/test-mode/${categoryId}/${selectedExam.id}`);
     }
   };
+
+  // Extract emoji from name (if exists)
+  const extractEmoji = (name: string): { name: string; emoji: string } => {
+    const emojiRegex =
+      /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu;
+    const emojis = name.match(emojiRegex);
+    const emoji = emojis ? emojis.join('') : '';
+    const cleanName = name.replace(emojiRegex, '').trim();
+    return { name: cleanName, emoji };
+  };
+
+  const displayName = testSeriesName || 'Thi thử cùng Mirano';
+  const { name: cleanCategoryName, emoji: categoryEmoji } =
+    extractEmoji(displayName);
 
   const breadcrumbItems = [
     {
@@ -126,7 +98,7 @@ const TestDetail = () => {
       title: <Link to="/test-page">Thi thử cùng Mirano</Link>,
     },
     {
-      title: `${testSeriesName}❤❤❤`,
+      title: `${cleanCategoryName}${categoryEmoji}`,
     },
   ];
 
@@ -139,36 +111,52 @@ const TestDetail = () => {
         </div>
 
         {/* Title */}
-        <h1 className="test-detail-title">Đề thi "{testSeriesName}❤❤❤"</h1>
+        <h1 className="test-detail-title">
+          Đề thi "{cleanCategoryName}
+          {categoryEmoji}"
+        </h1>
 
         {/* Test Cards Grid */}
-        <div className="test-detail-grid">
-          {testExams.map(exam => (
-            <div key={exam.id} className="test-detail-card">
-              {/* Content */}
-              <div className="test-detail-card-content">
-                <div className="test-detail-category">{testSeriesName}❤❤</div>
-                <h3 className="test-detail-card-title">{exam.title}</h3>
-                <div className="test-detail-card-stats">
-                  <div className="test-detail-stat-item">
-                    <IconPeople color="#676767" width={16} height={16} />
-                    <span>{exam.participantCount} người tham gia</span>
+        {loading ? (
+          <div className="test-detail-loading">
+            <Spin size="large" />
+          </div>
+        ) : testExams.length > 0 ? (
+          <div className="test-detail-grid">
+            {testExams.map(exam => (
+              <div key={exam.id} className="test-detail-card">
+                {/* Content */}
+                <div className="test-detail-card-content">
+                  <div className="test-detail-category">
+                    {cleanCategoryName}
+                    {categoryEmoji}
                   </div>
-                  <div className="test-detail-stat-item">
-                    <IconClock color="#676767" width={16} height={16} />
-                    <span>{exam.duration} phút</span>
+                  <h3 className="test-detail-card-title">{exam.name}</h3>
+                  <div className="test-detail-card-stats">
+                    <div className="test-detail-stat-item">
+                      <IconPeople color="#676767" width={16} height={16} />
+                      <span>{exam.numberOfParticipants} người tham gia</span>
+                    </div>
+                    <div className="test-detail-stat-item">
+                      <IconClock color="#676767" width={16} height={16} />
+                      <span>{exam.duration} phút</span>
+                    </div>
                   </div>
+                  <button
+                    className="test-detail-card-button"
+                    onClick={() => handleOpenModal(exam)}
+                  >
+                    Vào thi ngay
+                  </button>
                 </div>
-                <button
-                  className="test-detail-card-button"
-                  onClick={() => handleOpenModal(exam)}
-                >
-                  Vào thi ngay
-                </button>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="test-detail-empty">
+            <p>Chưa có đề thi nào</p>
+          </div>
+        )}
       </div>
 
       <Modal
@@ -188,14 +176,16 @@ const TestDetail = () => {
             <div className="test-info-modal-header">
               <div className="test-info-modal-title-section">
                 <div className="test-info-modal-category">
-                  {testSeriesName} 😍😍
+                  {cleanCategoryName} {categoryEmoji}
                 </div>
-                <h2 className="test-info-modal-title">{selectedExam.title}</h2>
+                <h2 className="test-info-modal-title">{selectedExam.name}</h2>
               </div>
               <div className="test-info-modal-stats">
                 <div className="test-info-stat-item">
                   <IconPeople color="#676767" width={16} height={16} />
-                  <span>{selectedExam.participantCount} người tham gia</span>
+                  <span>
+                    {selectedExam.numberOfParticipants} người tham gia
+                  </span>
                 </div>
                 <div className="test-info-stat-item">
                   <IconClock color="#676767" width={16} height={16} />
@@ -208,23 +198,27 @@ const TestDetail = () => {
             <div className="test-info-modal-body">
               <h3 className="test-info-section-title">Cấu trúc bài thi</h3>
               <div className="test-info-parts-list">
-                {selectedExam.parts.map((part, index) => (
-                  <div key={part.id} className="test-info-part-item">
-                    <div className="test-info-part-name">{part.name}</div>
-                    <div className="test-info-part-details">
-                      {part.time > 0 && (
-                        <>
-                          <span>Thời gian: {part.time} phút</span>
-                          <DotIcon />
-                        </>
-                      )}
-                      <span>Số câu hỏi: {part.questionCount} câu</span>
-                    </div>
-                    {index < selectedExam.parts.length - 1 && (
-                      <div className="test-info-part-divider" />
-                    )}
-                  </div>
-                ))}
+                {selectedExam.testDetails &&
+                  selectedExam.testDetails.length > 0 &&
+                  selectedExam.testDetails
+                    .sort((a, b) => a.pos - b.pos)
+                    .map((part, index) => (
+                      <div key={part.id} className="test-info-part-item">
+                        <div className="test-info-part-name">{part.name}</div>
+                        <div className="test-info-part-details">
+                          {part.timeLimit > 0 && (
+                            <>
+                              <span>Thời gian: {part.timeLimit} phút</span>
+                              <DotIcon />
+                            </>
+                          )}
+                          <span>Số câu hỏi: {part.numberOfQuestions} câu</span>
+                        </div>
+                        {index < selectedExam.testDetails.length - 1 && (
+                          <div className="test-info-part-divider" />
+                        )}
+                      </div>
+                    ))}
               </div>
             </div>
 

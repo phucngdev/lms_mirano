@@ -65,7 +65,7 @@ const Application = () => {
       title: 'Kanji Mnemonic',
       description: 'Phương pháp ghi nhớ chữ Hán (Kanji) mẹo nhớ từ',
       hasStars: false,
-      link: '/kanji-mnemonic',
+      link: '/kanji-dictionary',
       image: (
         <div className="application-card-image application-card-image-kanji">
           <img src={kanjiLogo} alt="Kanji Mnemonic" />
