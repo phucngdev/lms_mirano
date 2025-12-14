@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Breadcrumb, Spin } from 'antd';
 import { getAllCourseService } from '#/api/services/course.service';
+import courseImg1 from '#/assets/images/course/course_img1.png';
+import courseImg2 from '#/assets/images/course/course_img2.png';
+import courseImg3 from '#/assets/images/course/course_img3.jpg';
 import './StudyPage.scss';
 
 interface CourseCard {
@@ -33,6 +36,9 @@ interface ApiResponse {
   data: ApiCourse[];
 }
 
+// Array of course banner images
+const courseBannerImages = [courseImg1, courseImg2, courseImg3];
+
 const StudyPage = () => {
   const navigate = useNavigate();
   const [courseCards, setCourseCards] = useState<CourseCard[]>([]);
@@ -46,25 +52,31 @@ const StudyPage = () => {
         const apiData: ApiResponse = response.data;
 
         if (apiData.statusCode === 200 && apiData.data) {
-          const mappedCourses: CourseCard[] = apiData.data.map(course => {
-            // Determine type based on course title or type
-            const isKanji = course.title.toLowerCase().includes('kanji');
-            const type: 'chill' | 'kanji' = isKanji ? 'kanji' : 'chill';
+          const mappedCourses: CourseCard[] = apiData.data.map(
+            (course, index) => {
+              // Determine type based on course title or type
+              const isKanji = course.title.toLowerCase().includes('kanji');
+              const type: 'chill' | 'kanji' = isKanji ? 'kanji' : 'chill';
 
-            // Extract level from title if it's a chill class (e.g., "N1", "N2")
-            const levelMatch = course.title.match(/N[1-5]/);
-            const level = levelMatch ? levelMatch[0] : undefined;
+              // Extract level from title if it's a chill class (e.g., "N1", "N2")
+              const levelMatch = course.title.match(/N[1-5]/);
+              const level = levelMatch ? levelMatch[0] : undefined;
 
-            return {
-              id: course.id,
-              type,
-              title: course.title,
-              lessonCount: course.sessonCount,
-              level,
-              subtitle: type === 'chill' ? 'CHILL CLASS' : undefined,
-              bannerImage: course.thumbnailUrl,
-            };
-          });
+              // Use one of the 3 course images based on index (rotate through images)
+              const bannerImage =
+                courseBannerImages[index % courseBannerImages.length];
+
+              return {
+                id: course.id,
+                type,
+                title: course.title,
+                lessonCount: course.sessonCount,
+                level,
+                subtitle: type === 'chill' ? 'CHILL CLASS' : undefined,
+                bannerImage,
+              };
+            },
+          );
 
           setCourseCards(mappedCourses);
         }
