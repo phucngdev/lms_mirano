@@ -7,6 +7,8 @@ import { RootState, useAppDispatch } from '#/src/redux/store/store';
 import { getAllCourse } from '#/src/redux/thunk/course.thunk';
 import { useEffect } from 'react';
 import { EnrolledCourseEntity } from '#/api/requests';
+import img_replace from '#/assets/images/course/img_replace.png';
+import { Link } from 'react-router-dom';
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -29,9 +31,9 @@ const Courses = () => {
             <h2 className="courses-title">Khóa học của bạn</h2>
             <div className="courses-count">{courses?.length || 0}</div>
           </div>
-          <a href="#" className="courses-view-all">
+          <Link to="/study-page" className="courses-view-all">
             Xem tất cả
-          </a>
+          </Link>
         </div>
 
         <div className="courses-slider">
@@ -98,7 +100,7 @@ const Courses = () => {
                     <div className="courses-card-right">
                       <div className="courses-course-thumbnail">
                         <img
-                          src={course.thumbnailUrl}
+                          src={img_replace}
                           alt={course.title}
                           className="courses-thumbnail-image"
                         />

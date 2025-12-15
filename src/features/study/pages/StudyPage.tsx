@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Breadcrumb, Spin } from 'antd';
 import { getAllCourseService } from '#/api/services/course.service';
-import courseImg1 from '#/assets/images/course/course_img1.png';
-import courseImg2 from '#/assets/images/course/course_img2.png';
-import courseImg3 from '#/assets/images/course/course_img3.jpg';
+import img_replace from '#/assets/images/course/img_replace.png';
 import './StudyPage.scss';
+import { EnrolledCourseEntity } from '#/api/requests';
 
 interface CourseCard {
   id: string;
@@ -37,11 +36,10 @@ interface ApiResponse {
 }
 
 // Array of course banner images
-const courseBannerImages = [courseImg1, courseImg2, courseImg3];
 
 const StudyPage = () => {
   const navigate = useNavigate();
-  const [courseCards, setCourseCards] = useState<CourseCard[]>([]);
+  const [courseCards, setCourseCards] = useState<EnrolledCourseEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -49,36 +47,9 @@ const StudyPage = () => {
       try {
         setLoading(true);
         const response = await getAllCourseService();
-        const apiData: ApiResponse = response.data;
 
-        if (apiData.statusCode === 200 && apiData.data) {
-          const mappedCourses: CourseCard[] = apiData.data.map(
-            (course, index) => {
-              // Determine type based on course title or type
-              const isKanji = course.title.toLowerCase().includes('kanji');
-              const type: 'chill' | 'kanji' = isKanji ? 'kanji' : 'chill';
-
-              // Extract level from title if it's a chill class (e.g., "N1", "N2")
-              const levelMatch = course.title.match(/N[1-5]/);
-              const level = levelMatch ? levelMatch[0] : undefined;
-
-              // Use one of the 3 course images based on index (rotate through images)
-              const bannerImage =
-                courseBannerImages[index % courseBannerImages.length];
-
-              return {
-                id: course.id,
-                type,
-                title: course.title,
-                lessonCount: course.sessonCount,
-                level,
-                subtitle: type === 'chill' ? 'CHILL CLASS' : undefined,
-                bannerImage,
-              };
-            },
-          );
-
-          setCourseCards(mappedCourses);
+        if (response.data.statusCode === 200 && response.data.data) {
+          setCourseCards(response.data.data);
         }
       } catch (error) {
         console.error('Error fetching courses:', error);
@@ -136,25 +107,17 @@ const StudyPage = () => {
                 <div
                   className={`study-card-banner study-card-banner-${card.type}`}
                 >
-                  {card.bannerImage ? (
-                    <img
-                      src={card.bannerImage}
-                      alt={card.title}
-                      className="study-card-banner-image"
-                    />
-                  ) : (
-                    <div className="study-card-banner-placeholder">
-                      {card.type === 'chill'
-                        ? `${card.level} ${card.subtitle}`
-                        : 'KANJI NINJA 1500'}
-                    </div>
-                  )}
+                  <img
+                    src={img_replace}
+                    alt={card.title}
+                    className="study-card-banner-image"
+                  />
                 </div>
 
                 <div className="study-card-content">
                   <h3 className="study-card-title">{card.title}</h3>
                   <div className="study-card-lesson">
-                    {card.lessonCount} bài học
+                    {card.sessonCount} bài học
                   </div>
                   <button
                     className="study-card-play-button"

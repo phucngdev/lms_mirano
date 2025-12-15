@@ -7,6 +7,7 @@ import { Breadcrumb, Spin } from 'antd';
 import { getMockTestService } from '#/api/services/mockTest.service';
 import Cookies from 'js-cookie';
 import { TestCategoryEntity } from '#/api/requests';
+import img_replace from '#/assets/images/header/logo_mirano.png';
 
 const TestPage = () => {
   const navigate = useNavigate();
@@ -90,15 +91,11 @@ const TestPage = () => {
               const { name, emoji } = extractEmoji(card.name);
               return (
                 <div key={card.id} className="test-card">
-                  {/* Image */}
                   <div className="test-card-logo">
                     <img
-                      src={card.imageUrl || logoMankai}
+                      src={img_replace}
                       alt={name}
                       className="test-logo-icon"
-                      onError={e => {
-                        e.currentTarget.src = logoMankai;
-                      }}
                     />
                   </div>
 
